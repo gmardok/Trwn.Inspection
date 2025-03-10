@@ -15,5 +15,21 @@ namespace Trwn.Inspection.Models
         public string Factory { get; set; } = null!;
         public string InspectionPlace { get; set; } = null!;
         public DateTime InspectionDate { get; set; }
+        public InspectionOrderArticle[] InspectionOrder{ get; set; } = null!;
+        public string QualityMark { get; set; } = null!;
+        public string InspectionStandard { get; set; } = null!;
+        public string InspectionSampling { get; set; } = null!;
+        public int InspectionQuantity { get; set; }
+        public int SampleSize { get; set; }
+        public string InspectionCartonNo { get; set; } = null!;
+        public DefectsSummary[] DefectsSummary { get; set; } = null!;
+        public InspectionResultType InspectionResult { get; set; }
+        public string InspectorName { get; set; } = null!;
+        public string FactoryRepresentative { get; set; } = null!;
+        public InspectionDefect[] InspectionDefects { get; set; } = null!;
+        public string[] Remarks { get; set; } = null!;
+        public ProductionStatus ProductionStatus { get; set; } = null!;
+        public ListOfDocuments ListOfDocuments { get; set; } = null!;
+        public FotoDocumentation[] FotoDocumentation { get; set; } = null!;
     }
 }
