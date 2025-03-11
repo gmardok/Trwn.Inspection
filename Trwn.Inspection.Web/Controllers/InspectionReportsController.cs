@@ -1,8 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Trwn.Inspection.Models;
 
 namespace Trwn.Inspection.Web.Controllers
@@ -11,20 +7,24 @@ namespace Trwn.Inspection.Web.Controllers
     [ApiController]
     public class InspectionReportsController : ControllerBase
     {
-        private static readonly List<InspectionReport> InspectionReports = new List<InspectionReport>();
+        private readonly IInspectionReportsService _inspectionReportsService;
 
+        public InspectionReportsController(IInspectionReportsService inspectionReportsService)
+        {
+            _inspectionReportsService = inspectionReportsService;
+        }
         // GET: api/InspectionReports
         [HttpGet]
         public async Task<ActionResult<IEnumerable<InspectionReport>>> GetInspectionReports()
         {
-            return await Task.FromResult(Ok(InspectionReports));
+            return await Task.FromResult(Ok(_inspectionReportsService.GetInspectionReports()));
         }
 
         // GET: api/InspectionReports/5
         [HttpGet("{id}")]
         public async Task<ActionResult<InspectionReport>> GetInspectionReport(Guid id)
         {
-            var report = InspectionReports.FirstOrDefault(r => r.Id == id);
+            var report = _inspectionReportsService.GetInspectionReport(id);
             if (report == null)
             {
                 return await Task.FromResult(NotFound());
@@ -36,49 +36,19 @@ namespace Trwn.Inspection.Web.Controllers
         [HttpPost]
         public async Task<ActionResult<InspectionReport>> PostInspectionReport(InspectionReport report)
         {
-            report.Id = Guid.NewGuid(); // Generate a new GUID for the ID
-            InspectionReports.Add(report);
-            return await Task.FromResult(CreatedAtAction(nameof(GetInspectionReport), new { id = report.Id }, report));
+            var newReport = _inspectionReportsService.AddInspectionReport(report);
+            return await Task.FromResult(CreatedAtAction(nameof(GetInspectionReport), new { id = newReport.Id }, newReport));
         }
 
         // PUT: api/InspectionReports/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutInspectionReport(Guid id, InspectionReport report)
         {
-            var existingReport = InspectionReports.FirstOrDefault(r => r.Id == id);
-            if (existingReport == null)
+            var updatedReport = _inspectionReportsService.UpdateInspectionReport(id, report);
+            if (updatedReport == null)
             {
                 return await Task.FromResult(NotFound());
             }
-
-            // Update properties
-            existingReport.InspectionType = report.InspectionType;
-            existingReport.Name = report.Name;
-            existingReport.Inspector = report.Inspector;
-            existingReport.ReportNo = report.ReportNo;
-            existingReport.Client = report.Client;
-            existingReport.ContractNo = report.ContractNo;
-            existingReport.ArticleName = report.ArticleName;
-            existingReport.Supplier = report.Supplier;
-            existingReport.Factory = report.Factory;
-            existingReport.InspectionPlace = report.InspectionPlace;
-            existingReport.InspectionDate = report.InspectionDate;
-            existingReport.InspectionOrder = report.InspectionOrder;
-            existingReport.QualityMark = report.QualityMark;
-            existingReport.InspectionStandard = report.InspectionStandard;
-            existingReport.InspectionSampling = report.InspectionSampling;
-            existingReport.InspectionQuantity = report.InspectionQuantity;
-            existingReport.SampleSize = report.SampleSize;
-            existingReport.InspectionCartonNo = report.InspectionCartonNo;
-            existingReport.DefectsSummary = report.DefectsSummary;
-            existingReport.InspectionResult = report.InspectionResult;
-            existingReport.InspectorName = report.InspectorName;
-            existingReport.FactoryRepresentative = report.FactoryRepresentative;
-            existingReport.InspectionDefects = report.InspectionDefects;
-            existingReport.Remarks = report.Remarks;
-            existingReport.ProductionStatus = report.ProductionStatus;
-            existingReport.ListOfDocuments = report.ListOfDocuments;
-            existingReport.FotoDocumentation = report.FotoDocumentation;
 
             return await Task.FromResult(NoContent());
         }
@@ -87,13 +57,8 @@ namespace Trwn.Inspection.Web.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteInspectionReport(Guid id)
         {
-            var report = InspectionReports.FirstOrDefault(r => r.Id == id);
-            if (report == null)
-            {
-                return await Task.FromResult(NotFound());
-            }
+            await _inspectionReportsService.DeleteInspectionReport(id);
 
-            InspectionReports.Remove(report);
             return await Task.FromResult(NoContent());
         }
     }
