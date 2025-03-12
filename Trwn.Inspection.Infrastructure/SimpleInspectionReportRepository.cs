@@ -68,5 +68,42 @@ namespace Trwn.Inspection.Infrastructure
             }
             return Task.FromResult(existingReport);
         }
+
+        public Task<FotoDocumentation?> AddInspectionFoto(Guid id, FotoDocumentation fotoDocumentation)
+        {
+            var existingReport = InspectionReports.FirstOrDefault(r => r.Id == id);
+            if (existingReport != null)
+            {
+                fotoDocumentation.Id = Guid.NewGuid();
+                existingReport.FotoDocumentation.Add(fotoDocumentation);
+
+                return Task.FromResult<FotoDocumentation?>(fotoDocumentation);
+            }
+            return Task.FromResult<FotoDocumentation?>(null);
+        }
+
+        public Task DeleteInspectionFoto(Guid id, Guid fotoId)
+        {
+            var existingReport = InspectionReports.FirstOrDefault(r => r.Id == id);
+            if (existingReport != null)
+            {
+                var foto = existingReport.FotoDocumentation.FirstOrDefault(f => f.Id == fotoId);
+                if (foto != null)
+                {
+                    existingReport.FotoDocumentation.Remove(foto);
+                }
+            }
+            return Task.CompletedTask;
+        }
+
+        public Task<FotoDocumentation?> GetInspectionFoto(Guid id, Guid fotoId)
+        {
+            var existingReport = InspectionReports.FirstOrDefault(r => r.Id == id);
+            if (existingReport != null)
+            {
+                return Task.FromResult(existingReport.FotoDocumentation.FirstOrDefault(f => f.Id == fotoId));
+            }
+            return Task.FromResult<FotoDocumentation?>(null);
+        }
     }
 }

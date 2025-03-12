@@ -34,4 +34,19 @@ public class InspectionReportsService: IInspectionReportsService
     {
         return _inspectionReportRepository.UpdateInspectionReport(id, report);
     }
+
+    public Task<FotoDocumentation?> AddInspectionFoto(Guid id, FotoDocumentation fotoDocumentation)
+    {
+        return _inspectionReportRepository.AddInspectionFoto(id, fotoDocumentation);
+    }
+
+    public Task<FotoDocumentation?> GetInspectionFoto(Guid id, Guid fotoId)
+    {
+        return _inspectionReportRepository.GetInspectionFoto(id, fotoId);
+    }
+
+    public Task DeleteInspectionFoto(Guid id, Guid fotoId)
+    {
+        return _inspectionReportRepository.DeleteInspectionFoto(id, fotoId);
+    }
 }
