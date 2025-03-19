@@ -4,7 +4,7 @@ namespace Trwn.Inspection.Models
 {
     public class FotoDocumentation
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; }
         public InspectionDefectType DefectType { get; set; }
         public string Code { get; set; } = null!;
         public string Description { get; set; } = null!;

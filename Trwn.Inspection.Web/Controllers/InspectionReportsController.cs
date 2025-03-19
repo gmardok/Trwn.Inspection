@@ -15,85 +15,100 @@ namespace Trwn.Inspection.Web.Controllers
         }
         // GET: api/InspectionReports
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<InspectionReport>>> GetInspectionReports()
+        public async Task<IActionResult> GetInspectionReports()
         {
-            return await Task.FromResult(Ok(_inspectionReportsService.GetInspectionReports()));
+            var result = await _inspectionReportsService.GetInspectionReports();
+            return Ok(result);
         }
 
         // GET: api/InspectionReports/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<InspectionReport>> GetInspectionReport(Guid id)
+        public async Task<IActionResult> GetInspectionReport(string id)
         {
-            var report = _inspectionReportsService.GetInspectionReport(id);
+            var report = await _inspectionReportsService.GetInspectionReport(id);
             if (report == null)
             {
-                return await Task.FromResult(NotFound());
+                return NotFound();
             }
-            return await Task.FromResult(Ok(report));
+            return Ok(report);
         }
 
         // POST: api/InspectionReports
         [HttpPost]
-        public async Task<ActionResult<InspectionReport>> AddInspectionReport(InspectionReport report)
+        public async Task<IActionResult> AddInspectionReport(InspectionReport report)
         {
-            var newReport = _inspectionReportsService.AddInspectionReport(report);
-            return await Task.FromResult(CreatedAtAction(nameof(GetInspectionReport), new { id = newReport.Id }, newReport));
+            report.Id = Guid.NewGuid().ToString();
+            var newReport = await _inspectionReportsService.AddInspectionReport(report);
+            return CreatedAtAction(nameof(GetInspectionReport), new { id = newReport.Id }, newReport);
         }
 
         // PUT: api/InspectionReports/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateInspectionReport(Guid id, InspectionReport report)
+        public async Task<IActionResult> UpdateInspectionReport(string id, InspectionReport report)
         {
             var updatedReport = _inspectionReportsService.UpdateInspectionReport(id, report);
             if (updatedReport == null)
             {
-                return await Task.FromResult(NotFound());
+                return NotFound();
             }
 
-            return await Task.FromResult(NoContent());
+            return Ok(updatedReport);
         }
 
         // POST: api/InspectionReports/5/Foto
         [HttpPost("{id}/foto")]
-        public async Task<IActionResult> AddFotoDocumentation(Guid id, FotoDocumentation fotoDocumentation )
+        public async Task<IActionResult> AddFotoDocumentation(string id, FotoDocumentation fotoDocumentation )
         {
-            var newFoto = _inspectionReportsService.AddInspectionFoto(id, fotoDocumentation);
+            fotoDocumentation.Id = Guid.NewGuid().ToString();
+            var newFoto = await _inspectionReportsService.AddInspectionFoto(id, fotoDocumentation);
             if (newFoto == null)
             {
-                return await Task.FromResult(NotFound());
+                return NotFound();
             }
 
-            return await Task.FromResult(CreatedAtAction(nameof(GetFotoDocumentation), new { id = id, fotoId = newFoto.Id }, newFoto));
+            return CreatedAtAction(nameof(GetFotoDocumentation), new { id = id, fotoId = newFoto.Id }, newFoto);
         }
 
         // GET: api/InspectionReports/5/Foto/5
         [HttpGet("{id}/foto/{fotoId}")]
-        public async Task<ActionResult<FotoDocumentation>> GetFotoDocumentation(Guid id, Guid fotoId)
+        public async Task<IActionResult> GetFotoDocumentation(string id, string fotoId)
         {
-            var foto = _inspectionReportsService.GetInspectionFoto(id, fotoId);
+            var foto = await _inspectionReportsService.GetInspectionFoto(id, fotoId);
             if (foto == null)
             {
-                return await Task.FromResult(NotFound());
+                return NotFound();
             }
-            return await Task.FromResult(Ok(foto));
+            return Ok(foto);
+        }
+
+        // GET: api/InspectionReports/5/Foto
+        [HttpGet("{id}/foto")]
+        public async Task<IActionResult> GetAllFotoDocumentation(string id)
+        {
+            var photos = await _inspectionReportsService.GetAllInspectionFoto(id);
+            if (photos == null)
+            {
+                return NotFound();
+            }
+            return Ok(photos);
         }
 
         // DELETE: api/InspectionReports/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteInspectionReport(Guid id)
+        public async Task<IActionResult> DeleteInspectionReport(string id)
         {
             await _inspectionReportsService.DeleteInspectionReport(id);
 
-            return await Task.FromResult(NoContent());
+            return NoContent();
         }
 
         // DELETE: api/InspectionReports/5/Foto/5
         [HttpDelete("{id}/foto/{fotoId}")]
-        public async Task<IActionResult> DeleteFotoDocumentation(Guid id, Guid fotoId)
+        public async Task<IActionResult> DeleteFotoDocumentation(string id, string fotoId)
         {
             await _inspectionReportsService.DeleteInspectionFoto(id, fotoId);
 
-            return await Task.FromResult(NoContent());
+            return NoContent();
         }
     }
 }

@@ -4,10 +4,11 @@ namespace Trwn.Inspection.Web.Infrastructure
 {
     public static class ServiceRegistration
     {
-        public static void AddServices(this IServiceCollection services)
+        public static void AddServices(this IServiceCollection services)    
         {
             services.AddScoped<IInspectionReportsService,InspectionReportsService>();
-            services.AddSingleton<IInspectionReportRepository, SimpleInspectionReportRepository>();
+            //services.AddSingleton<IInspectionReportRepository, SimpleInspectionReportRepository>();
+            services.AddSingleton<IInspectionReportRepository, InspectionReportMongoRepository>();
         }
     }
 }

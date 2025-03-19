@@ -2,12 +2,13 @@
 
 public interface IInspectionReportsService
 {
-    Task<IEnumerable<InspectionReport>> GetInspectionReports();
-    Task<InspectionReport?> GetInspectionReport(Guid id);
+    Task<List<InspectionReport>> GetInspectionReports();
+    Task<InspectionReport?> GetInspectionReport(string id);
     Task<InspectionReport> AddInspectionReport(InspectionReport report);
-    Task<InspectionReport?> UpdateInspectionReport(Guid id, InspectionReport report);
-    Task DeleteInspectionReport(Guid id);
-    Task<FotoDocumentation?> AddInspectionFoto(Guid id, FotoDocumentation fotoDocumentation);
-    Task<FotoDocumentation?> GetInspectionFoto(Guid id, Guid fotoId);
-    Task DeleteInspectionFoto(Guid id, Guid fotoId);
+    Task<InspectionReport?> UpdateInspectionReport(string id, InspectionReport report);
+    Task DeleteInspectionReport(string id);
+    Task<FotoDocumentation?> AddInspectionFoto(string id, FotoDocumentation fotoDocumentation);
+    Task<FotoDocumentation?> GetInspectionFoto(string id, string fotoId);
+    Task<List<FotoDocumentation>> GetAllInspectionFoto(string id);
+    Task DeleteInspectionFoto(string id, string fotoId);
 }

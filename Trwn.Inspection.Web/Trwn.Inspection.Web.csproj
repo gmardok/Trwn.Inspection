@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Trwn.Inspection.Configuration\Trwn.Inspection.Configuration.csproj" />
     <ProjectReference Include="..\Trwn.Inspection.Core\Trwn.Inspection.Core.csproj" />
     <ProjectReference Include="..\Trwn.Inspection.Models\Trwn.Inspection.Models.csproj" />
   </ItemGroup>

@@ -5,7 +5,7 @@ namespace Trwn.Inspection.Models
 {
     public class InspectionReport
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; }
         public InspectionType InspectionType { get; set; }
         public string Name { get; set; } = null!;
         public string Inspector { get; set; } = null!;

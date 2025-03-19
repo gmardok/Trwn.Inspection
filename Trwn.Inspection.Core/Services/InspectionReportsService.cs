@@ -15,38 +15,43 @@ public class InspectionReportsService: IInspectionReportsService
         return _inspectionReportRepository.AddInspectionReport(report);
     }
 
-    public Task DeleteInspectionReport(Guid id)
+    public Task DeleteInspectionReport(string id)
     {
         return _inspectionReportRepository.DeleteInspectionReport(id);
     }
 
-    public Task<InspectionReport?> GetInspectionReport(Guid id)
+    public Task<InspectionReport?> GetInspectionReport(string id)
     {
         return _inspectionReportRepository.GetInspectionReport(id);
     }
 
-    public Task<IEnumerable<InspectionReport>> GetInspectionReports()
+    public async Task<List<InspectionReport>> GetInspectionReports()
     {
-        return _inspectionReportRepository.GetInspectionReports();
+        return await _inspectionReportRepository.GetInspectionReports();
     }
 
-    public Task<InspectionReport?> UpdateInspectionReport(Guid id, InspectionReport report)
+    public Task<InspectionReport?> UpdateInspectionReport(string id, InspectionReport report)
     {
         return _inspectionReportRepository.UpdateInspectionReport(id, report);
     }
 
-    public Task<FotoDocumentation?> AddInspectionFoto(Guid id, FotoDocumentation fotoDocumentation)
+    public Task<FotoDocumentation?> AddInspectionFoto(string id, FotoDocumentation fotoDocumentation)
     {
         return _inspectionReportRepository.AddInspectionFoto(id, fotoDocumentation);
     }
 
-    public Task<FotoDocumentation?> GetInspectionFoto(Guid id, Guid fotoId)
+    public Task<FotoDocumentation?> GetInspectionFoto(string id, string fotoId)
     {
         return _inspectionReportRepository.GetInspectionFoto(id, fotoId);
     }
 
-    public Task DeleteInspectionFoto(Guid id, Guid fotoId)
+    public Task DeleteInspectionFoto(string id, string fotoId)
     {
         return _inspectionReportRepository.DeleteInspectionFoto(id, fotoId);
+    }
+
+    public Task<List<FotoDocumentation>> GetAllInspectionFoto(string id)
+    {
+        return _inspectionReportRepository.GetAllInspectionFoto(id);
     }
 }
