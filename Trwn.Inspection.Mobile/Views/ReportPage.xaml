@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:viewModels="clr-namespace:Trwn.Inspection.Mobile.ViewModels"
+             xmlns:cmp="clr-namespace:Trwn.Inspection.Mobile.Views.Components"
+             x:Class="Trwn.Inspection.Mobile.Views.ReportPage"
+             x:DataType="viewModels:ReportViewModel">
+    <ContentPage.BindingContext>
+        <viewModels:ReportViewModel />
+    </ContentPage.BindingContext>
+    <VerticalStackLayout>
+        <cmp:ReportType Value="{Binding ReportType, Mode=TwoWay}" />
+        <Button Text="Save" Command="{Binding SaveCommand}" HorizontalOptions="End" />
+    </VerticalStackLayout>
+</ContentPage>
