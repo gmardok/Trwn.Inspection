@@ -11,23 +11,49 @@ public partial class ReportType : ContentView
 
     private bool _duringChecked;
 
+    public static readonly Dictionary<InspectionType, string> InspectionTypeLabels = new()
+    {
+        { InspectionType.Final, "FINAL RANDOM INSPECTION" },
+        { InspectionType.ReInspection, "RE-INSPECTION" },
+        { InspectionType.DuringProduction, "DURING PRODUCTION INSPECTION" }
+    };
+
+    public string SelectedReportTypeLabel => InspectionTypeLabels[Value];
+
     public ReportType()
 	{
 		InitializeComponent();
-	}
+        BindingContext = this;
+    }
 
-    public static readonly BindableProperty ValueProperty = BindableProperty.Create(nameof(Value), typeof(InspectionType), typeof(ReportType), InspectionType.Final);
+    public static readonly BindableProperty ValueProperty = BindableProperty.Create(
+        nameof(Value),
+        typeof(InspectionType),
+        typeof(ReportType),
+        InspectionType.Final,
+        propertyChanged: OnValueChanged);
+
+    private static void OnValueChanged(BindableObject bindable, object oldValue, object newValue)
+    {
+        var control = (ReportType)bindable;
+        control.UpdateCheckedStates((InspectionType)newValue);
+        control.OnPropertyChanged(nameof(SelectedReportTypeLabel));
+    }
+
+    private void UpdateCheckedStates(InspectionType value)
+    {
+        _finalChecked = value == InspectionType.Final;
+        _reChecked = value == InspectionType.ReInspection;
+        _duringChecked = value == InspectionType.DuringProduction;
+        OnPropertyChanged(nameof(FinalChecked));
+        OnPropertyChanged(nameof(ReChecked));
+        OnPropertyChanged(nameof(DuringChecked));
+    }
 
     public InspectionType Value
     {
         get => (InspectionType)GetValue(ValueProperty);
-        set
-        {
-            _finalChecked = value == InspectionType.Final;
-            _reChecked = value == InspectionType.ReInspection;
-            _duringChecked = value == InspectionType.DuringProduction;
-            SetValue(ValueProperty, value);
-        }
+        set => SetValue(ValueProperty, value);
     }
 
     public bool FinalChecked
@@ -37,9 +63,6 @@ public partial class ReportType : ContentView
         {
             if (!value || _finalChecked) return;
             Value = InspectionType.Final;
-            OnPropertyChanged(nameof(FinalChecked));
-            OnPropertyChanged(nameof(ReChecked));
-            OnPropertyChanged(nameof(DuringChecked));
         }
     }
 
@@ -50,9 +73,6 @@ public partial class ReportType : ContentView
         {
             if (!value || _reChecked) return;
             Value = InspectionType.ReInspection;
-            OnPropertyChanged(nameof(FinalChecked));
-            OnPropertyChanged(nameof(ReChecked));
-            OnPropertyChanged(nameof(DuringChecked));
         }
     }
 
@@ -63,9 +83,6 @@ public partial class ReportType : ContentView
         {
             if (!value || _duringChecked) return;
             Value = InspectionType.DuringProduction;
-            OnPropertyChanged(nameof(FinalChecked));
-            OnPropertyChanged(nameof(ReChecked));
-            OnPropertyChanged(nameof(DuringChecked));
         }
     }
 }

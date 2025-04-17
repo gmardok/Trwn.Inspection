@@ -9,8 +9,70 @@
     <ContentPage.BindingContext>
         <viewModels:ReportViewModel />
     </ContentPage.BindingContext>
-    <VerticalStackLayout>
-        <cmp:ReportType Value="{Binding ReportType, Mode=TwoWay}" />
-        <Button Text="Save" Command="{Binding SaveCommand}" HorizontalOptions="End" />
-    </VerticalStackLayout>
+    <ScrollView>
+        <VerticalStackLayout Padding="10" Spacing="10">
+            <cmp:ReportType Value="{Binding ReportType, Mode=TwoWay}" />
+            <toolkit:Expander>
+                <toolkit:Expander.Header>
+                    <Label Text="Inspection Items" />
+                </toolkit:Expander.Header>
+                <toolkit:Expander.Content>
+                    <VerticalStackLayout Padding="10" Spacing="10">
+                        <Label Text="Report No" />
+                        <Entry Placeholder="Report No" Text="{Binding ReportNo, Mode=TwoWay}" />
+                        <Label Text="Client" />
+                        <Entry Placeholder="Client" Text="{Binding Client, Mode=TwoWay}" />
+                        <Label Text="Contract No" />
+                        <Entry Placeholder="Contract No" Text="{Binding ContractNo, Mode=TwoWay}" />
+                        <Label Text="Article Name" />
+                        <Entry Placeholder="Article Name" Text="{Binding ArticleName, Mode=TwoWay}" />
+                        <Label Text="Supplier" />
+                        <Entry Placeholder="Supplier" Text="{Binding Supplier, Mode=TwoWay}" />
+                        <Label Text="Factory" />
+                        <Entry Placeholder="Factory" Text="{Binding Factory, Mode=TwoWay}" />
+                        <Label Text="Inspection Place" />
+                        <Entry Placeholder="Inspection Place" Text="{Binding InspectionPlace, Mode=TwoWay}" />
+                        <Label Text="Inspection Date" />
+                        <DatePicker Date="{Binding InspectionDate, Mode=TwoWay}" />
+                    </VerticalStackLayout>
+                </toolkit:Expander.Content>
+            </toolkit:Expander>
+            <toolkit:Expander>
+                <toolkit:Expander.Header>
+                    <Label Text="Inspection Items" />
+                </toolkit:Expander.Header>
+                <toolkit:Expander.Content>
+                    <CollectionView ItemsSource="{Binding InspectionOrderArticles}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <cmp:InspectionOrderArticleView />
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </toolkit:Expander.Content>
+            </toolkit:Expander>
+            <Button Text="Add Inspection Item" Command="{Binding AddInspectionOrderArticleCommand}" />
+            <Label Text="Name" />
+            <Entry Placeholder="Name" Text="{Binding Name, Mode=TwoWay}" />
+            <Label Text="Inspector" />
+            <Entry Placeholder="Inspector" Text="{Binding Inspector, Mode=TwoWay}" />
+            <Label Text="Quality Mark" />
+            <Entry Placeholder="Quality Mark" Text="{Binding QualityMark, Mode=TwoWay}" />
+            <Label Text="Inspection Standard" />
+            <Entry Placeholder="Inspection Standard" Text="{Binding InspectionStandard, Mode=TwoWay}" />
+            <Label Text="Inspection Sampling" />
+            <Entry Placeholder="Inspection Sampling" Text="{Binding InspectionSampling, Mode=TwoWay}" />
+            <Label Text="Inspection Quantity" />
+            <Entry Placeholder="Inspection Quantity" Text="{Binding InspectionQuantity, Mode=TwoWay}" Keyboard="Numeric" />
+            <Label Text="Sample Size" />
+            <Entry Placeholder="Sample Size" Text="{Binding SampleSize, Mode=TwoWay}" Keyboard="Numeric" />
+            <Label Text="Inspection Carton No" />
+            <Entry Placeholder="Inspection Carton No" Text="{Binding InspectionCartonNo, Mode=TwoWay}" />
+            <Label Text="Inspector Name" />
+            <Entry Placeholder="Inspector Name" Text="{Binding InspectorName, Mode=TwoWay}" />
+            <Label Text="Factory Representative" />
+            <Entry Placeholder="Factory Representative" Text="{Binding FactoryRepresentative, Mode=TwoWay}" />
+            <Button Text="Save" Command="{Binding SaveCommand}" HorizontalOptions="End" />
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>
