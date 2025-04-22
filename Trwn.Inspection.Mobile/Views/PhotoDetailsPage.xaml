@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:Trwn.Inspection.Mobile.ViewModels"
+             x:Class="Trwn.Inspection.Mobile.Views.PhotoDetailsPage"
+             x:DataType="viewModels:PhotoDetailsViewModel">
+    <ContentPage.BindingContext>
+        <viewModels:PhotoDetailsViewModel />
+    </ContentPage.BindingContext>
+    <VerticalStackLayout Padding="10" Spacing="10">
+        <Label Text="Select Photo Type" />
+        <Picker ItemsSource="{Binding PhotoTypes}" SelectedItem="{Binding SelectedPhotoType, Mode=TwoWay}" />
+        <Label Text="Photo Description" />
+        <Editor Placeholder="Enter description..." Text="{Binding PhotoDescription, Mode=TwoWay}" />
+        <Image Source="{Binding PhotoPath}" HeightRequest="200" WidthRequest="200" Aspect="AspectFill" />
+        <Button Text="Take Photo" Command="{Binding TakePhotoCommand}" />
+        <Button Text="Select Photo" Command="{Binding SelectPhotoCommand}" />
+        <Button Text="Back" Command="{Binding NavigateBackCommand}" />
+        <Button Text="Save" Command="{Binding SavePhotoDetailsCommand}" />
+    </VerticalStackLayout>
+</ContentPage>

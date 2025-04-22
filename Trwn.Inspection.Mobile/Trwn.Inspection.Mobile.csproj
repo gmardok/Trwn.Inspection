@@ -39,7 +39,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(TargetFramework)'=='net9.0-ios'">
-	  <CodesignKey>Apple Development: Created via API (K94ZMNF6LK)</CodesignKey>
+	  <CodesignKey>Apple Development: Created via API (ATHUD8UH2C)</CodesignKey>
 	  <CodesignProvision>VS: WildCard Development</CodesignProvision>
 	</PropertyGroup>
 
@@ -89,6 +89,9 @@
 	  <MauiXaml Update="Views\Components\ReportType.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\PhotoDetailsPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\ReportPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -99,5 +102,7 @@
 	    <DependentUpon>CheckBoxLabeled.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
-
+	<ItemGroup>
+		<BundleResource Include="Platforms\iOS\Info.plist" />
+	</ItemGroup>
 </Project>

@@ -2,8 +2,8 @@
 {
     public enum InspectionResultType
     {
-        Pass,
-        Fail,
-        Pending
+        Passes = 1,
+        Pending = 2,
+        Fail = 3,
     }
 }

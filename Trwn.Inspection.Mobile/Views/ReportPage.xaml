@@ -14,7 +14,7 @@
             <cmp:ReportType Value="{Binding ReportType, Mode=TwoWay}" />
             <toolkit:Expander>
                 <toolkit:Expander.Header>
-                    <Label Text="Inspection Items" />
+                    <Label Text="Inspection Details" />
                 </toolkit:Expander.Header>
                 <toolkit:Expander.Content>
                     <VerticalStackLayout Padding="10" Spacing="10">
@@ -42,25 +42,23 @@
                     <Label Text="Inspection Items" />
                 </toolkit:Expander.Header>
                 <toolkit:Expander.Content>
-                    <CollectionView ItemsSource="{Binding InspectionOrderArticles}">
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate>
-                                <cmp:InspectionOrderArticleView />
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
+                    <VerticalStackLayout Padding="10" Spacing="10">
+                        <CollectionView ItemsSource="{Binding InspectionOrderArticles}">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <cmp:InspectionOrderArticleView />
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                        <Button Text="Add Inspection Item" Command="{Binding AddInspectionOrderArticleCommand}" />
+                    </VerticalStackLayout>
                 </toolkit:Expander.Content>
             </toolkit:Expander>
-            <Button Text="Add Inspection Item" Command="{Binding AddInspectionOrderArticleCommand}" />
-            <Label Text="Name" />
-            <Entry Placeholder="Name" Text="{Binding Name, Mode=TwoWay}" />
-            <Label Text="Inspector" />
-            <Entry Placeholder="Inspector" Text="{Binding Inspector, Mode=TwoWay}" />
             <Label Text="Quality Mark" />
             <Entry Placeholder="Quality Mark" Text="{Binding QualityMark, Mode=TwoWay}" />
             <Label Text="Inspection Standard" />
             <Entry Placeholder="Inspection Standard" Text="{Binding InspectionStandard, Mode=TwoWay}" />
-            <Label Text="Inspection Sampling" />
+            <Label Text="Sampling Standard" />
             <Entry Placeholder="Inspection Sampling" Text="{Binding InspectionSampling, Mode=TwoWay}" />
             <Label Text="Inspection Quantity" />
             <Entry Placeholder="Inspection Quantity" Text="{Binding InspectionQuantity, Mode=TwoWay}" Keyboard="Numeric" />
@@ -68,11 +66,22 @@
             <Entry Placeholder="Sample Size" Text="{Binding SampleSize, Mode=TwoWay}" Keyboard="Numeric" />
             <Label Text="Inspection Carton No" />
             <Entry Placeholder="Inspection Carton No" Text="{Binding InspectionCartonNo, Mode=TwoWay}" />
+            <Label Text="Inspection Result" />
+            <Picker ItemsSource="{Binding InspectionResultTypes}" SelectedItem="{Binding InspectionResult, Mode=TwoWay}">
+                <Picker.ItemDisplayBinding>
+                    <Binding Path="." />
+                </Picker.ItemDisplayBinding>
+            </Picker>
             <Label Text="Inspector Name" />
             <Entry Placeholder="Inspector Name" Text="{Binding InspectorName, Mode=TwoWay}" />
             <Label Text="Factory Representative" />
             <Entry Placeholder="Factory Representative" Text="{Binding FactoryRepresentative, Mode=TwoWay}" />
+            <Button Text="Add Photo" Command="{Binding NavigateToPhotoDetailsCommand}" />
             <Button Text="Save" Command="{Binding SaveCommand}" HorizontalOptions="End" />
+            <!--Label Text="Name" />
+            <Entry Placeholder="Name" Text="{Binding Name, Mode=TwoWay}" />
+            <Label Text="Inspector" />
+            <Entry Placeholder="Inspector" Text="{Binding Inspector, Mode=TwoWay}" /-->
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

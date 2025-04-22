@@ -3,6 +3,7 @@ using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Trwn.Inspection.Mobile.Services;
+using Trwn.Inspection.Mobile.Views;
 using Trwn.Inspection.Models;
 
 namespace Trwn.Inspection.Mobile.ViewModels
@@ -13,12 +14,17 @@ namespace Trwn.Inspection.Mobile.ViewModels
 
         public ReportViewModel()
         {
-            _report = new InspectionReport();
+            _report = new InspectionReport
+            {
+                InspectionResult = InspectionResultType.Passes
+            };
             InspectionOrderArticles = new ObservableCollection<InspectionOrderArticleViewModel>();
             AddInspectionOrderArticleCommand = new RelayCommand(AddInspectionOrderArticle);
             SaveCommand = new AsyncRelayCommand(() => new PersistanceService().Save(_report));
+            NavigateToPhotoDetailsCommand = new RelayCommand(NavigateToPhotoDetails);
         }
 
+        public IRelayCommand NavigateToPhotoDetailsCommand { get; }
         public ICommand SaveCommand { get; private set; }
         public ICommand AddInspectionOrderArticleCommand { get; private set; }
 
@@ -270,12 +276,40 @@ namespace Trwn.Inspection.Mobile.ViewModels
                 }
             }
         }
+        
+        public ObservableCollection<InspectionResultType> InspectionResultTypes { get; } =
+            new ObservableCollection<InspectionResultType>((InspectionResultType[])Enum.GetValues(typeof(InspectionResultType)));
+
+        public InspectionResultType InspectionResult
+        {
+            get => _report.InspectionResult;
+            set
+            {
+                if (_report.InspectionResult != value)
+                {
+                    _report.InspectionResult = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         private void AddInspectionOrderArticle()
         {
             var newArticle = new InspectionOrderArticleViewModel();
             newArticle.RemoveCommand = new RelayCommand(() => InspectionOrderArticles.Remove(newArticle));
             InspectionOrderArticles.Add(newArticle);
+        }
+
+        private async void NavigateToPhotoDetails()
+        {
+            try
+            {
+                await Shell.Current.GoToAsync("PhotoDetailsPage", true);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Navigation error: {ex.Message}");
+            }            
         }
     }
 }
