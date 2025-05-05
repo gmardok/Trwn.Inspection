@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:Trwn.Inspection.Mobile.ViewModels"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="Trwn.Inspection.Mobile.Views.Components.InspectionOrderArticleView"
+             x:DataType="viewModels:InspectionOrderArticleViewModel">
+    <ContentView.BindingContext>
+        <viewModels:InspectionOrderArticleViewModel />
+    </ContentView.BindingContext>
+    <toolkit:Expander>
+        <toolkit:Expander.Header>
+            <Label Text="{Binding LotNoDisplay}" />
+        </toolkit:Expander.Header>
+        <toolkit:Expander.Content>
+            <VerticalStackLayout Padding="10" Spacing="10">
+                <Label Text="Lot No" />
+                <Entry Placeholder="Lot No" Text="{Binding LotNo, Mode=TwoWay}" Keyboard="Numeric" />
+                <Label Text="Article Number" />
+                <Entry Placeholder="Article Number" Text="{Binding ArticleNumber, Mode=TwoWay}" />
+                <Label Text="Order Quantity" />
+                <Entry Placeholder="Order Quantity" Text="{Binding OrderQuantity, Mode=TwoWay}" Keyboard="Numeric" />
+                <Label Text="Shipment Quantity (Pcs)" />
+                <Entry Placeholder="Shipment Quantity (Pcs)" Text="{Binding ShipmentQuantityPcs, Mode=TwoWay}" Keyboard="Numeric" />
+                <Label Text="Shipment Quantity (Cartons)" />
+                <Entry Placeholder="Shipment Quantity (Cartons)" Text="{Binding ShipmentQuantityCartons, Mode=TwoWay}" Keyboard="Numeric" />
+                <Label Text="Units Packed" />
+                <Entry Placeholder="Units Packed" Text="{Binding UnitsPacked, Mode=TwoWay}" Keyboard="Numeric" />
+                <Label Text="Units Packed Percentage" />
+                <Label Text="{Binding UnitsPackedPercentage, Mode=OneWay}" />
+                <Label Text="Units Finished Not Packed" />
+                <Entry Placeholder="Units Finished Not Packed" Text="{Binding UnitsFinishedNotPacked, Mode=TwoWay}" Keyboard="Numeric" />
+                <Label Text="Units Finished Not Packed Percentage" />
+                <Label Text="{Binding UnitsFinishedNotPackedPercentage, Mode=OneWay}" />
+                <Label Text="Units Not Finished" />
+                <Entry Placeholder="Units Not Finished" Text="{Binding UnitsNotFinished, Mode=TwoWay}" Keyboard="Numeric" />
+                <Label Text="Units Not Finished Percentage" />
+                <Label Text="{Binding UnitsNotFinishedPercentage, Mode=OneWay}" />
+                <Button Text="Remove" Command="{Binding RemoveCommand}" />
+            </VerticalStackLayout>
+        </toolkit:Expander.Content>
+    </toolkit:Expander>
+</ContentView>

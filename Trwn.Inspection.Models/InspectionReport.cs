@@ -5,7 +5,6 @@ namespace Trwn.Inspection.Models
 {
     public class InspectionReport
     {
-        public string Id { get; set; }
         public InspectionType InspectionType { get; set; }
         public string Name { get; set; } = null!;
         public string Inspector { get; set; } = null!;
@@ -24,14 +23,14 @@ namespace Trwn.Inspection.Models
         public int InspectionQuantity { get; set; }
         public int SampleSize { get; set; }
         public string InspectionCartonNo { get; set; } = null!;
-        public List<DefectsSummary> DefectsSummary { get; set; } = new List<DefectsSummary>();
+        public DefectsSummary[] DefectsSummary { get; set; } = null!;
         public InspectionResultType InspectionResult { get; set; }
         public string InspectorName { get; set; } = null!;
         public string FactoryRepresentative { get; set; } = null!;
-        public List<InspectionDefect> InspectionDefects { get; set; } = new List<InspectionDefect>();
-        public List<string> Remarks { get; set; } = null!;
+        public InspectionDefect[] InspectionDefects { get; set; } = null!;
+        public string[] Remarks { get; set; } = null!;
         public ProductionStatus ProductionStatus { get; set; } = null!;
         public ListOfDocuments ListOfDocuments { get; set; } = null!;
-        public List<FotoDocumentation> FotoDocumentation { get; set; } = new List<FotoDocumentation>();
+        public List<PhotoDocumentation> PhotoDocumentation { get; set; } = new List<PhotoDocumentation>();
     }
 }
