@@ -4,6 +4,7 @@
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:viewModels="clr-namespace:Trwn.Inspection.Mobile.ViewModels"
              xmlns:cmp="clr-namespace:Trwn.Inspection.Mobile.Views.Components"
+             xmlns:local="clr-namespace:Trwn.Inspection.Models;assembly=Trwn.Inspection.Models"
              x:Class="Trwn.Inspection.Mobile.Views.ReportPage"
              x:DataType="viewModels:ReportViewModel">
     <ContentPage.BindingContext>
@@ -54,29 +55,192 @@
                     </VerticalStackLayout>
                 </toolkit:Expander.Content>
             </toolkit:Expander>
-            <Label Text="Quality Mark" />
-            <Entry Placeholder="Quality Mark" Text="{Binding QualityMark, Mode=TwoWay}" />
-            <Label Text="Inspection Standard" />
-            <Entry Placeholder="Inspection Standard" Text="{Binding InspectionStandard, Mode=TwoWay}" />
-            <Label Text="Sampling Standard" />
-            <Entry Placeholder="Inspection Sampling" Text="{Binding InspectionSampling, Mode=TwoWay}" />
-            <Label Text="Inspection Quantity" />
-            <Entry Placeholder="Inspection Quantity" Text="{Binding InspectionQuantity, Mode=TwoWay}" Keyboard="Numeric" />
-            <Label Text="Sample Size" />
-            <Entry Placeholder="Sample Size" Text="{Binding SampleSize, Mode=TwoWay}" Keyboard="Numeric" />
-            <Label Text="Inspection Carton No" />
-            <Entry Placeholder="Inspection Carton No" Text="{Binding InspectionCartonNo, Mode=TwoWay}" />
-            <Label Text="Inspection Result" />
-            <Picker ItemsSource="{Binding InspectionResultTypes}" SelectedItem="{Binding InspectionResult, Mode=TwoWay}">
-                <Picker.ItemDisplayBinding>
-                    <Binding Path="." />
-                </Picker.ItemDisplayBinding>
-            </Picker>
-            <Label Text="Inspector Name" />
-            <Entry Placeholder="Inspector Name" Text="{Binding InspectorName, Mode=TwoWay}" />
-            <Label Text="Factory Representative" />
-            <Entry Placeholder="Factory Representative" Text="{Binding FactoryRepresentative, Mode=TwoWay}" />
-            <Button Text="Add Photo" Command="{Binding NavigateToPhotoDetailsCommand}" />
+            <toolkit:Expander>
+                <toolkit:Expander.Header>
+                    <Label Text="General" />
+                </toolkit:Expander.Header>
+                <toolkit:Expander.Content>
+                    <VerticalStackLayout Padding="10" Spacing="10">
+                        <Label Text="Quality Mark" />
+                            <Entry Placeholder="Quality Mark" Text="{Binding QualityMark, Mode=TwoWay}" />
+                            <Label Text="Inspection Standard" />
+                            <Entry Placeholder="Inspection Standard" Text="{Binding InspectionStandard, Mode=TwoWay}" />
+                            <Label Text="Sampling Standard" />
+                            <Entry Placeholder="Inspection Sampling" Text="{Binding InspectionSampling, Mode=TwoWay}" />
+                            <Label Text="Inspection Quantity" />
+                            <Entry Placeholder="Inspection Quantity" Text="{Binding InspectionQuantity, Mode=TwoWay}" Keyboard="Numeric" />
+                            <Label Text="Sample Size" />
+                            <Entry Placeholder="Sample Size" Text="{Binding SampleSize, Mode=TwoWay}" Keyboard="Numeric" />
+                            <Label Text="Inspection Carton No" />
+                            <Entry Placeholder="Inspection Carton No" Text="{Binding InspectionCartonNo, Mode=TwoWay}" />
+                            <Label Text="Inspection Result" />
+                            <Picker ItemsSource="{Binding InspectionResultTypes}" SelectedItem="{Binding InspectionResult, Mode=TwoWay}">
+                                <Picker.ItemDisplayBinding>
+                                    <Binding Path="." />
+                                </Picker.ItemDisplayBinding>
+                            </Picker>
+                            <Label Text="Inspector Name" />
+                            <Entry Placeholder="Inspector Name" Text="{Binding InspectorName, Mode=TwoWay}" />
+                            <Label Text="Factory Representative" />
+                            <Entry Placeholder="Factory Representative" Text="{Binding FactoryRepresentative, Mode=TwoWay}" />
+                    </VerticalStackLayout>
+                </toolkit:Expander.Content>
+            </toolkit:Expander>
+            <toolkit:Expander>
+                <toolkit:Expander.Header>
+                    <Label Text="Major defects" />
+                </toolkit:Expander.Header>
+                <toolkit:Expander.Content>
+                    <VerticalStackLayout Padding="10" Spacing="10">
+                        <CollectionView ItemsSource="{Binding MajorDefects}"
+                                        Grid.Row="1"
+                                        Grid.ColumnSpan="3"
+                                        Grid.RowSpan="2"
+                                        Margin="10" >
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout ItemSpacing="10" Orientation="Vertical"/>
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="local:PhotoDocumentation">
+                                    <HorizontalStackLayout Spacing="10">
+                                        <Image Source="{Binding PicturePath}" HeightRequest="100" WidthRequest="100" Aspect="AspectFill">
+                                            <Image.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding BindingContext.EnlargePhotoCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}" CommandParameter="{Binding PicturePath}" />
+                                            </Image.GestureRecognizers>
+                                        </Image>
+                                        <Label Text="{Binding Description}" VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                        <Button Text="Add major defect" Command="{Binding NavigateToPhotoDetailsCommand}" CommandParameter="{x:Static local:PhotoType.Major}" />
+                    </VerticalStackLayout>
+                </toolkit:Expander.Content>
+            </toolkit:Expander>
+            <toolkit:Expander>
+                <toolkit:Expander.Header>
+                    <Label Text="Minor defects" />
+                </toolkit:Expander.Header>
+                <toolkit:Expander.Content>
+                    <VerticalStackLayout Padding="10" Spacing="10">
+                        <CollectionView ItemsSource="{Binding MinorDefects}"
+                                        Grid.Row="1"
+                                        Grid.ColumnSpan="3"
+                                        Grid.RowSpan="2"
+                                        Margin="10" >
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout ItemSpacing="10" Orientation="Vertical"/>
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="local:PhotoDocumentation">
+                                    <HorizontalStackLayout Spacing="10">
+                                        <Image Source="{Binding PicturePath}" HeightRequest="100" WidthRequest="100" Aspect="AspectFill">
+                                            <Image.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding BindingContext.EnlargePhotoCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}" CommandParameter="{Binding PicturePath}" />
+                                            </Image.GestureRecognizers>
+                                        </Image>
+                                        <Label Text="{Binding Description}" VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                        <Button Text="Add minor defects" Command="{Binding NavigateToPhotoDetailsCommand}" CommandParameter="{x:Static local:PhotoType.Minor}" />
+                    </VerticalStackLayout>
+                </toolkit:Expander.Content>
+            </toolkit:Expander>
+            <toolkit:Expander>
+                <toolkit:Expander.Header>
+                    <Label Text="Shipping marks" />
+                </toolkit:Expander.Header>
+                <toolkit:Expander.Content>
+                    <VerticalStackLayout Padding="10" Spacing="10">
+                        <CollectionView ItemsSource="{Binding ShippingMarks}"
+                                        Grid.Row="1"
+                                        Grid.ColumnSpan="3"
+                                        Grid.RowSpan="2"
+                                        Margin="10" >
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout ItemSpacing="10" Orientation="Vertical"/>
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="local:PhotoDocumentation">
+                                    <HorizontalStackLayout Spacing="10">
+                                        <Image Source="{Binding PicturePath}" HeightRequest="100" WidthRequest="100" Aspect="AspectFill">
+                                            <Image.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding BindingContext.EnlargePhotoCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}" CommandParameter="{Binding PicturePath}" />
+                                            </Image.GestureRecognizers>
+                                        </Image>
+                                        <Label Text="{Binding Description}" VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                        <Button Text="Add shipping mark" Command="{Binding NavigateToPhotoDetailsCommand}" CommandParameter="{x:Static local:PhotoType.ShippingMark}" />
+                    </VerticalStackLayout>
+                </toolkit:Expander.Content>
+            </toolkit:Expander>
+            <toolkit:Expander>
+                <toolkit:Expander.Header>
+                    <Label Text="Packaging" />
+                </toolkit:Expander.Header>
+                <toolkit:Expander.Content>
+                    <VerticalStackLayout Padding="10" Spacing="10">
+                        <CollectionView ItemsSource="{Binding Packagings}"
+                                        Grid.Row="1"
+                                        Grid.ColumnSpan="3"
+                                        Grid.RowSpan="2"
+                                        Margin="10" >
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout ItemSpacing="10" Orientation="Vertical"/>
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="local:PhotoDocumentation">
+                                    <HorizontalStackLayout Spacing="10">
+                                        <Image Source="{Binding PicturePath}" HeightRequest="100" WidthRequest="100" Aspect="AspectFill">
+                                            <Image.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding BindingContext.EnlargePhotoCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}" CommandParameter="{Binding PicturePath}" />
+                                            </Image.GestureRecognizers>
+                                        </Image>
+                                        <Label Text="{Binding Description}" VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                        <Button Text="Add packaging" Command="{Binding NavigateToPhotoDetailsCommand}" CommandParameter="{x:Static local:PhotoType.Packaging}" />
+                    </VerticalStackLayout>
+                </toolkit:Expander.Content>
+            </toolkit:Expander>
+            <toolkit:Expander>
+                <toolkit:Expander.Header>
+                    <Label Text="Packages with deffects" />
+                </toolkit:Expander.Header>
+                <toolkit:Expander.Content>
+                    <VerticalStackLayout Padding="10" Spacing="10">
+                        <CollectionView ItemsSource="{Binding PackagesWithDeffects}"
+                                        Grid.Row="1"
+                                        Grid.ColumnSpan="3"
+                                        Grid.RowSpan="2"
+                                        Margin="10" >
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout ItemSpacing="10" Orientation="Vertical"/>
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="local:PhotoDocumentation">
+                                    <HorizontalStackLayout Spacing="10">
+                                        <Image Source="{Binding PicturePath}" HeightRequest="100" WidthRequest="100" Aspect="AspectFill">
+                                            <Image.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding BindingContext.EnlargePhotoCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}" CommandParameter="{Binding PicturePath}" />
+                                            </Image.GestureRecognizers>
+                                        </Image>
+                                        <Label Text="{Binding Description}" VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                        <Button Text="Add package with deffects" Command="{Binding NavigateToPhotoDetailsCommand}" CommandParameter="{x:Static local:PhotoType.PackageWithDeffects}" />
+                    </VerticalStackLayout>
+                </toolkit:Expander.Content>
+            </toolkit:Expander>
             <Button Text="Save" Command="{Binding SaveCommand}" HorizontalOptions="End" />
             <!--Label Text="Name" />
             <Entry Placeholder="Name" Text="{Binding Name, Mode=TwoWay}" />

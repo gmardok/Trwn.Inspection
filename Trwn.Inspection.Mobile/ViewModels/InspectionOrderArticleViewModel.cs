@@ -5,37 +5,40 @@ using Trwn.Inspection.Models;
 
 namespace Trwn.Inspection.Mobile.ViewModels
 {
-    public class InspectionOrderArticleViewModel : ObservableObject
+    public partial class InspectionOrderArticleViewModel : ObservableObject
     {
-        private InspectionOrderArticle _inspectionOrderArticle;
+        public InspectionOrderArticle InspectionOrderArticle;
 
         public InspectionOrderArticleViewModel()
         {
-            _inspectionOrderArticle = new InspectionOrderArticle();
+            InspectionOrderArticle = new InspectionOrderArticle();
             RemoveCommand = new RelayCommand(Remove);
         }
 
+        public string LotNoDisplay => LotNo == 0 ? "New lot" : LotNo.ToString();
+
         public int LotNo
         {
-            get => _inspectionOrderArticle.LotNo;
+            get => InspectionOrderArticle.LotNo;
             set
             {
-                if (_inspectionOrderArticle.LotNo != value)
+                if (InspectionOrderArticle.LotNo != value)
                 {
-                    _inspectionOrderArticle.LotNo = value;
+                    InspectionOrderArticle.LotNo = value;
                     OnPropertyChanged();
+                    OnPropertyChanged(nameof(LotNoDisplay));
                 }
             }
         }
 
         public string ArticleNumber
         {
-            get => _inspectionOrderArticle.ArticleNumber;
+            get => InspectionOrderArticle.ArticleNumber;
             set
             {
-                if (_inspectionOrderArticle.ArticleNumber != value)
+                if (InspectionOrderArticle.ArticleNumber != value)
                 {
-                    _inspectionOrderArticle.ArticleNumber = value;
+                    InspectionOrderArticle.ArticleNumber = value;
                     OnPropertyChanged();
                 }
             }
@@ -43,12 +46,12 @@ namespace Trwn.Inspection.Mobile.ViewModels
 
         public int OrderQuantity
         {
-            get => _inspectionOrderArticle.OrderQuantity;
+            get => InspectionOrderArticle.OrderQuantity;
             set
             {
-                if (_inspectionOrderArticle.OrderQuantity != value)
+                if (InspectionOrderArticle.OrderQuantity != value)
                 {
-                    _inspectionOrderArticle.OrderQuantity = value;
+                    InspectionOrderArticle.OrderQuantity = value;
                     OnPropertyChanged();
                     OnPropertyChanged(nameof(UnitsPackedPercentage));
                     OnPropertyChanged(nameof(UnitsFinishedNotPackedPercentage));
@@ -59,12 +62,12 @@ namespace Trwn.Inspection.Mobile.ViewModels
 
         public int ShipmentQuantityPcs
         {
-            get => _inspectionOrderArticle.ShipmentQuantityPcs;
+            get => InspectionOrderArticle.ShipmentQuantityPcs;
             set
             {
-                if (_inspectionOrderArticle.ShipmentQuantityPcs != value)
+                if (InspectionOrderArticle.ShipmentQuantityPcs != value)
                 {
-                    _inspectionOrderArticle.ShipmentQuantityPcs = value;
+                    InspectionOrderArticle.ShipmentQuantityPcs = value;
                     OnPropertyChanged();
                     OnPropertyChanged(nameof(UnitsPackedPercentage));
                     OnPropertyChanged(nameof(UnitsFinishedNotPackedPercentage));
@@ -75,12 +78,12 @@ namespace Trwn.Inspection.Mobile.ViewModels
 
         public int ShipmentQuantityCartons
         {
-            get => _inspectionOrderArticle.ShipmentQuantityCartons;
+            get => InspectionOrderArticle.ShipmentQuantityCartons;
             set
             {
-                if (_inspectionOrderArticle.ShipmentQuantityCartons != value)
+                if (InspectionOrderArticle.ShipmentQuantityCartons != value)
                 {
-                    _inspectionOrderArticle.ShipmentQuantityCartons = value;
+                    InspectionOrderArticle.ShipmentQuantityCartons = value;
                     OnPropertyChanged();
                 }
             }
@@ -88,12 +91,12 @@ namespace Trwn.Inspection.Mobile.ViewModels
 
         public int UnitsPacked
         {
-            get => _inspectionOrderArticle.UnitsPacked;
+            get => InspectionOrderArticle.UnitsPacked;
             set
             {
-                if (_inspectionOrderArticle.UnitsPacked != value)
+                if (InspectionOrderArticle.UnitsPacked != value)
                 {
-                    _inspectionOrderArticle.UnitsPacked = value;
+                    InspectionOrderArticle.UnitsPacked = value;
                     OnPropertyChanged();
                     OnPropertyChanged(nameof(UnitsPackedPercentage));
                 }
@@ -102,12 +105,12 @@ namespace Trwn.Inspection.Mobile.ViewModels
 
         public int UnitsFinishedNotPacked
         {
-            get => _inspectionOrderArticle.UnitsFinishedNotPacked;
+            get => InspectionOrderArticle.UnitsFinishedNotPacked;
             set
             {
-                if (_inspectionOrderArticle.UnitsFinishedNotPacked != value)
+                if (InspectionOrderArticle.UnitsFinishedNotPacked != value)
                 {
-                    _inspectionOrderArticle.UnitsFinishedNotPacked = value;
+                    InspectionOrderArticle.UnitsFinishedNotPacked = value;
                     OnPropertyChanged();
                     OnPropertyChanged(nameof(UnitsFinishedNotPackedPercentage));
                 }
@@ -116,12 +119,12 @@ namespace Trwn.Inspection.Mobile.ViewModels
 
         public int UnitsNotFinished
         {
-            get => _inspectionOrderArticle.UnitsNotFinished;
+            get => InspectionOrderArticle.UnitsNotFinished;
             set
             {
-                if (_inspectionOrderArticle.UnitsNotFinished != value)
+                if (InspectionOrderArticle.UnitsNotFinished != value)
                 {
-                    _inspectionOrderArticle.UnitsNotFinished = value;
+                    InspectionOrderArticle.UnitsNotFinished = value;
                     OnPropertyChanged();
                     OnPropertyChanged(nameof(UnitsNotFinishedPercentage));
                 }

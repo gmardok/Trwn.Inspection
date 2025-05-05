@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
+using CommunityToolkit.Maui.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Trwn.Inspection.Mobile.Services;
@@ -8,7 +9,7 @@ using Trwn.Inspection.Models;
 
 namespace Trwn.Inspection.Mobile.ViewModels
 {
-    public class ReportViewModel : ObservableObject
+    public partial class ReportViewModel : ObservableObject, IQueryAttributable
     {
         private InspectionReport _report;
 
@@ -18,17 +19,56 @@ namespace Trwn.Inspection.Mobile.ViewModels
             {
                 InspectionResult = InspectionResultType.Passes
             };
-            InspectionOrderArticles = new ObservableCollection<InspectionOrderArticleViewModel>();
+
+            /*var documentsDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            var files = Directory.GetFiles(documentsDirectory, "*.jpg");
+            for (int i = 0; i < files.Length; i++)
+            {
+                _report.PhotoDocumentation.Add(new PhotoDocumentation
+                {
+                    PhotoType = PhotoType.Major,
+                    Description = $"Photo {i + 1}",
+                    PicturePath = files[i],
+                    Code = i + 1
+                });
+            }*/
+
             AddInspectionOrderArticleCommand = new RelayCommand(AddInspectionOrderArticle);
             SaveCommand = new AsyncRelayCommand(() => new PersistanceService().Save(_report));
-            NavigateToPhotoDetailsCommand = new RelayCommand(NavigateToPhotoDetails);
+
+            EnlargePhotoCommand = new RelayCommand<string>(EnlargePhoto);
         }
 
-        public IRelayCommand NavigateToPhotoDetailsCommand { get; }
+        public ObservableCollection<PhotoDocumentation> MajorDefects => [.. _report.PhotoDocumentation.Where(p => p.PhotoType == PhotoType.Major)];
+        public ObservableCollection<PhotoDocumentation> MinorDefects => [.. _report.PhotoDocumentation.Where(p => p.PhotoType == PhotoType.Minor)];
+        public ObservableCollection<PhotoDocumentation> ShippingMarks => [.. _report.PhotoDocumentation.Where(p => p.PhotoType == PhotoType.ShippingMark)];
+        public ObservableCollection<PhotoDocumentation> Packagings => [.. _report.PhotoDocumentation.Where(p => p.PhotoType == PhotoType.Packaging)];
+        public ObservableCollection<PhotoDocumentation> PackagesWithDeffects => [.. _report.PhotoDocumentation.Where(p => p.PhotoType == PhotoType.PackageWithDeffects)];
+
+        public ICommand EnlargePhotoCommand { get; }
+
+        private void EnlargePhoto(string photoPath)
+        {
+            var currentPage = Application.Current?.Windows.FirstOrDefault();
+            if (currentPage?.Page != null)
+            {
+                currentPage.Page.ShowPopup(new FullScreenImagePopup(photoPath));
+            }
+        }
+
         public ICommand SaveCommand { get; private set; }
         public ICommand AddInspectionOrderArticleCommand { get; private set; }
 
-        public ObservableCollection<InspectionOrderArticleViewModel> InspectionOrderArticles { get; }
+        public ObservableCollection<InspectionOrderArticleViewModel> InspectionOrderArticles => [.. 
+            _report.InspectionOrder.Select(o => new InspectionOrderArticleViewModel 
+            {
+                InspectionOrderArticle = o,
+                RemoveCommand = new RelayCommand(() =>
+                {
+                    _report.InspectionOrder.Remove(o);
+                    OnPropertyChanged(nameof(InspectionOrderArticles));
+                })
+            })];
 
         public InspectionType ReportType
         {
@@ -293,18 +333,49 @@ namespace Trwn.Inspection.Mobile.ViewModels
             }
         }
 
-        private void AddInspectionOrderArticle()
+        public void ApplyQueryAttributes(IDictionary<string, object> query)
         {
-            var newArticle = new InspectionOrderArticleViewModel();
-            newArticle.RemoveCommand = new RelayCommand(() => InspectionOrderArticles.Remove(newArticle));
-            InspectionOrderArticles.Add(newArticle);
+            var photoType = (PhotoType)query["photoType"];
+            var code = _report.PhotoDocumentation.Count > 0 ? _report.PhotoDocumentation.Max(p => p.Code) + 1 : 1;
+            _report.PhotoDocumentation.Add(new PhotoDocumentation
+            {
+                PhotoType = photoType,
+                Description = (string)query["description"],
+                PicturePath = (string)query["path"],
+                Code = code
+            });
+            switch (photoType)
+            {
+                case PhotoType.Major:
+                    OnPropertyChanged(nameof(MajorDefects));
+                    break;
+                case PhotoType.Minor:
+                    OnPropertyChanged(nameof(MinorDefects));
+                    break;
+                case PhotoType.ShippingMark:
+                    OnPropertyChanged(nameof(ShippingMarks));
+                    break;
+                case PhotoType.Packaging:
+                    OnPropertyChanged(nameof(Packagings));
+                    break;
+                case PhotoType.PackageWithDeffects:
+                    OnPropertyChanged(nameof(PackagesWithDeffects));
+                    break;
+            }
         }
 
-        private async void NavigateToPhotoDetails()
+        private void AddInspectionOrderArticle()
+        {
+            _report.InspectionOrder.Add(new InspectionOrderArticle());
+            OnPropertyChanged(nameof(InspectionOrderArticles));
+        }
+
+        [RelayCommand]
+        private async Task NavigateToPhotoDetailsAsync(PhotoType photoType)
         {
             try
             {
-                await Shell.Current.GoToAsync("PhotoDetailsPage", true);
+                await Shell.Current.GoToAsync($"PhotoDetailsPage?photoType={(int)photoType}", true);
             }
             catch (Exception ex)
             {

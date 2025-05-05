@@ -10,6 +10,7 @@
     <TabBar>
         <ShellContent
             Title="Report"
+            Route="Report"
             ContentTemplate="{DataTemplate local:ReportPage}"
             Icon="{OnPlatform 'report.png', iOS='icon_notes_ios.png', MacCatalyst='report.png'}" />
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Trwn.Inspection.Models
 {
@@ -15,7 +16,7 @@ namespace Trwn.Inspection.Models
         public string Factory { get; set; } = null!;
         public string InspectionPlace { get; set; } = null!;
         public DateTime InspectionDate { get; set; }
-        public InspectionOrderArticle[] InspectionOrder{ get; set; } = null!;
+        public List<InspectionOrderArticle> InspectionOrder{ get; set; } = new List<InspectionOrderArticle>();
         public string QualityMark { get; set; } = null!;
         public string InspectionStandard { get; set; } = null!;
         public string InspectionSampling { get; set; } = null!;
@@ -30,6 +31,6 @@ namespace Trwn.Inspection.Models
         public string[] Remarks { get; set; } = null!;
         public ProductionStatus ProductionStatus { get; set; } = null!;
         public ListOfDocuments ListOfDocuments { get; set; } = null!;
-        public FotoDocumentation[] FotoDocumentation { get; set; } = null!;
+        public List<PhotoDocumentation> PhotoDocumentation { get; set; } = new List<PhotoDocumentation>();
     }
 }

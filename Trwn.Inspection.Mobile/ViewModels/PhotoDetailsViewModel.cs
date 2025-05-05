@@ -4,82 +4,39 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Maui.Media;
+using Trwn.Inspection.Mobile.Services;
+using Trwn.Inspection.Models;
 
 namespace Trwn.Inspection.Mobile.ViewModels
 {
-    public partial class PhotoDetailsViewModel : ObservableObject
+    public partial class PhotoDetailsViewModel : ObservableObject, IQueryAttributable
     {
-        public ObservableCollection<string> PhotoTypes { get; } = new ObservableCollection<string>
-        {
-            "Type 1",
-            "Type 2",
-            "Type 3",
-            "Type 4",
-            "Type 5"
-        };
-
         [ObservableProperty]
-        private string selectedPhotoType;
+        private PhotoType photoType;
 
         [ObservableProperty]
         private string photoDescription;
 
+        [ObservableProperty]
+        private string photoPath;
+
         public IAsyncRelayCommand TakePhotoCommand { get; }
-        public IAsyncRelayCommand SelectPhotoCommand { get; }
         public IRelayCommand NavigateBackCommand { get; }
         public IRelayCommand SavePhotoDetailsCommand { get; }
 
-        public PhotoDetailsViewModel()
+        private readonly IPhotoPickerService _photoPickerService;
+
+        public PhotoDetailsViewModel(IPhotoPickerService photoPickerService)
         {
+            _photoPickerService = photoPickerService;
             TakePhotoCommand = new AsyncRelayCommand(TakePhotoAsync);
-            SelectPhotoCommand = new AsyncRelayCommand(SelectPhotoAsync);
             NavigateBackCommand = new RelayCommand(NavigateBack);
             SavePhotoDetailsCommand = new RelayCommand(SavePhotoDetails);
         }
 
-        [ObservableProperty]
-        private string photoPath;
-
         private async Task TakePhotoAsync()
         {
-            try
-            {
-                var photo = await MediaPicker.Default.CapturePhotoAsync();
-                if (photo != null)
-                {
-                    var newFile = Path.Combine(FileSystem.AppDataDirectory, photo.FileName);
-                    using var stream = await photo.OpenReadAsync();
-                    using var newStream = File.OpenWrite(newFile);
-                    await stream.CopyToAsync(newStream);
-
-                    PhotoPath = newFile; // Update the photo path
-                }
-            }
-            catch (Exception ex)
-            {
-                // Handle exceptions (e.g., user cancels the operation)
-            }
-        }
-
-        private async Task SelectPhotoAsync()
-        {
-            try
-            {
-                var photo = await MediaPicker.Default.PickPhotoAsync();
-                if (photo != null)
-                {
-                    var newFile = Path.Combine(FileSystem.AppDataDirectory, photo.FileName);
-                    using var stream = await photo.OpenReadAsync();
-                    using var newStream = File.OpenWrite(newFile);
-                    await stream.CopyToAsync(newStream);
-
-                    PhotoPath = newFile; // Update the photo path
-                }
-            }
-            catch (Exception ex)
-            {
-                // Handle exceptions (e.g., user cancels the operation)
-            }
+            PhotoPath = await _photoPickerService.TakePhotoAsync();
         }
 
         private async void NavigateBack()
@@ -91,7 +48,6 @@ namespace Trwn.Inspection.Mobile.ViewModels
             }
             catch (Exception ex)
             {
-
                 throw;
             }
         }
@@ -99,7 +55,18 @@ namespace Trwn.Inspection.Mobile.ViewModels
         private void SavePhotoDetails()
         {
             // Logic to save photo details (e.g., send to backend or update model)
-            Shell.Current.GoToAsync("//ean /ReportPage");
+            var pars = new ShellNavigationQueryParameters(new Dictionary<string, object>
+                {
+                    { "photoType", (int)PhotoType },
+                    { "description", PhotoDescription},
+                    { "path", PhotoPath }
+                });
+            Shell.Current.GoToAsync("..", true, pars);
+        }
+
+        public void ApplyQueryAttributes(IDictionary<string, object> query)
+        {
+            PhotoType = (PhotoType)Convert.ToInt32(query["photoType"]);
         }
     }
 }

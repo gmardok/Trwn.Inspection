@@ -10,7 +10,7 @@
     </ContentView.BindingContext>
     <toolkit:Expander>
         <toolkit:Expander.Header>
-            <Label Text="{Binding LotNo}" />
+            <Label Text="{Binding LotNoDisplay}" />
         </toolkit:Expander.Header>
         <toolkit:Expander.Content>
             <VerticalStackLayout Padding="10" Spacing="10">

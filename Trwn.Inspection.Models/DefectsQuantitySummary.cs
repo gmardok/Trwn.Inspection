@@ -2,7 +2,7 @@
 {
     public class DefectsSummary
     {
-        public InspectionDefectType DefectType { get; set; }
+        public PhotoType DefectType { get; set; }
         public int Quantity { get; set; }
         public int AllowedQuantity { get; set; }
         public string Notes { get; set; } = null!;
