@@ -7,8 +7,8 @@ public interface IInspectionReportsService
     Task<InspectionReport> AddInspectionReport(InspectionReport report);
     Task<InspectionReport?> UpdateInspectionReport(string id, InspectionReport report);
     Task DeleteInspectionReport(string id);
-    Task<FotoDocumentation?> AddInspectionFoto(string id, FotoDocumentation fotoDocumentation);
-    Task<FotoDocumentation?> GetInspectionFoto(string id, string fotoId);
-    Task<List<FotoDocumentation>> GetAllInspectionFoto(string id);
-    Task DeleteInspectionFoto(string id, string fotoId);
+    Task<PhotoDocumentation?> AddInspectionFoto(string id, PhotoDocumentation PhotoDocumentation);
+    Task<PhotoDocumentation?> GetInspectionFoto(string id, int fotoCode);
+    Task<List<PhotoDocumentation>> GetAllInspectionFoto(string id);
+    Task DeleteInspectionFoto(string id, int fotoCode);
 }
