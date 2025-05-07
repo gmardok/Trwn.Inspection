@@ -36,18 +36,17 @@ namespace Trwn.Inspection.Infrastructure
             {
                 Console.WriteLine("There was a problem accessing your " +
                     "Atlas cluster. Check that the database name is " +
-                    "valid. Message: {e.Message}");
+                    $"valid. Message: {e.Message}");
                 Console.WriteLine(e);
                 Console.WriteLine();
                 throw;
             }
         }
 
-        public async Task<FotoDocumentation?> AddInspectionFoto(string id, FotoDocumentation fotoDocumentation)
+        public async Task<PhotoDocumentation?> AddInspectionFoto(string id, PhotoDocumentation photoDocumentation)
         {
-            fotoDocumentation.Id = fotoDocumentation.Id ?? Guid.NewGuid().ToString();
-            await _collection.UpdateOneAsync(r => r.Id == id, Builders<InspectionReport>.Update.Push(r => r.FotoDocumentation, fotoDocumentation));
-            return fotoDocumentation;
+            await _collection.UpdateOneAsync(r => r.Id == id, Builders<InspectionReport>.Update.Push(r => r.PhotoDocumentation, photoDocumentation));
+            return photoDocumentation;
         }
 
         public async Task<InspectionReport> AddInspectionReport(InspectionReport report)
@@ -57,10 +56,10 @@ namespace Trwn.Inspection.Infrastructure
             return report;
         }
 
-        public async Task DeleteInspectionFoto(string id, string fotoId)
+        public async Task DeleteInspectionFoto(string id, int fotoCode)
         {
             await _collection.UpdateOneAsync(r => r.Id == id, 
-                Builders<InspectionReport>.Update.PullFilter(r => r.FotoDocumentation, f => f.Id == fotoId));
+                Builders<InspectionReport>.Update.PullFilter(r => r.PhotoDocumentation, f => f.Code == fotoCode));
         }
 
         public async Task DeleteInspectionReport(string id)
@@ -68,16 +67,16 @@ namespace Trwn.Inspection.Infrastructure
             await _collection.DeleteOneAsync(r => r.Id == id);
         }
 
-        public async Task<List<FotoDocumentation>> GetAllInspectionFoto(string id)
+        public async Task<List<PhotoDocumentation>> GetAllInspectionFoto(string id)
         {
             var report = await _collection.Find(r => r.Id == id).FirstOrDefaultAsync();
-            return report?.FotoDocumentation ?? new List<FotoDocumentation>();
+            return report?.PhotoDocumentation ?? new List<PhotoDocumentation>();
         }
 
-        public async Task<FotoDocumentation?> GetInspectionFoto(string id, string fotoId)
+        public async Task<PhotoDocumentation?> GetInspectionFoto(string id, int fotoCode)
         {
             var report = await _collection.Find(r => r.Id == id).FirstOrDefaultAsync();
-            return report?.FotoDocumentation.FirstOrDefault(f => f.Id == fotoId);
+            return report?.PhotoDocumentation.FirstOrDefault(f => f.Code == fotoCode);
         }
 
         public async Task<InspectionReport?> GetInspectionReport(string id)

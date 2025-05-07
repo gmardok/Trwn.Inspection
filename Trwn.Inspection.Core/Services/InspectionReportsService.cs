@@ -35,22 +35,22 @@ public class InspectionReportsService: IInspectionReportsService
         return _inspectionReportRepository.UpdateInspectionReport(id, report);
     }
 
-    public Task<FotoDocumentation?> AddInspectionFoto(string id, FotoDocumentation fotoDocumentation)
+    public Task<PhotoDocumentation?> AddInspectionFoto(string id, PhotoDocumentation photoDocumentation)
     {
-        return _inspectionReportRepository.AddInspectionFoto(id, fotoDocumentation);
+        return _inspectionReportRepository.AddInspectionFoto(id, photoDocumentation);
     }
 
-    public Task<FotoDocumentation?> GetInspectionFoto(string id, string fotoId)
+    public Task<PhotoDocumentation?> GetInspectionFoto(string id, int fotoCode)
     {
-        return _inspectionReportRepository.GetInspectionFoto(id, fotoId);
+        return _inspectionReportRepository.GetInspectionFoto(id, fotoCode);
     }
 
-    public Task DeleteInspectionFoto(string id, string fotoId)
+    public Task DeleteInspectionFoto(string id, int fotoCode)
     {
-        return _inspectionReportRepository.DeleteInspectionFoto(id, fotoId);
+        return _inspectionReportRepository.DeleteInspectionFoto(id, fotoCode);
     }
 
-    public Task<List<FotoDocumentation>> GetAllInspectionFoto(string id)
+    public Task<List<PhotoDocumentation>> GetAllInspectionFoto(string id)
     {
         return _inspectionReportRepository.GetAllInspectionFoto(id);
     }
