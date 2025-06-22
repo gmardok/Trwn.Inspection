@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<?xaml-comp compile="true" ?>
+<ResourceDictionary 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    <!-- Blue Light Theme Colors -->
+    <Color x:Key="Primary">#1976D2</Color> <!-- Blue 700 -->
+    <Color x:Key="PrimaryDark">#1565C0</Color> <!-- Blue 800 -->
+    <Color x:Key="PrimaryLight">#63A4FF</Color> <!-- Blue 300 -->
+    <Color x:Key="PrimaryText">#FFFFFF</Color>
+    <Color x:Key="Secondary">#90CAF9</Color> <!-- Blue 200 -->
+    <Color x:Key="SecondaryDark">#42A5F5</Color> <!-- Blue 400 -->
+    <Color x:Key="SecondaryText">#0D47A1</Color>
+    <Color x:Key="Tertiary">#E3F2FD</Color> <!-- Blue 50 -->
+    <Color x:Key="Accent">#00B8D4</Color> <!-- Cyan A400 -->
+    <Color x:Key="Background">#F5F9FF</Color>
+    <Color x:Key="Surface">#FFFFFF</Color>
+    <Color x:Key="Error">#D32F2F</Color>
+    <Color x:Key="OnError">#FFFFFF</Color>
+    <Color x:Key="Gray100">#E3F2FD</Color>
+    <Color x:Key="Gray200">#BBDEFB</Color>
+    <Color x:Key="Gray300">#90CAF9</Color>
+    <Color x:Key="Gray400">#64B5F6</Color>
+    <Color x:Key="Gray500">#42A5F5</Color>
+    <Color x:Key="Gray600">#2196F3</Color>
+    <Color x:Key="Gray900">#0D47A1</Color>
+    <Color x:Key="Gray950">#0B3C75</Color>
+    <Color x:Key="White">#FFFFFF</Color>
+    <Color x:Key="Black">#000000</Color>
+    <!-- Brushes -->
+    <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource Primary}"/>
+    <SolidColorBrush x:Key="PrimaryDarkBrush" Color="{StaticResource PrimaryDark}"/>
+    <SolidColorBrush x:Key="PrimaryLightBrush" Color="{StaticResource PrimaryLight}"/>
+    <SolidColorBrush x:Key="SecondaryBrush" Color="{StaticResource Secondary}"/>
+    <SolidColorBrush x:Key="SecondaryDarkBrush" Color="{StaticResource SecondaryDark}"/>
+    <SolidColorBrush x:Key="TertiaryBrush" Color="{StaticResource Tertiary}"/>
+    <SolidColorBrush x:Key="AccentBrush" Color="{StaticResource Accent}"/>
+    <SolidColorBrush x:Key="BackgroundBrush" Color="{StaticResource Background}"/>
+    <SolidColorBrush x:Key="SurfaceBrush" Color="{StaticResource Surface}"/>
+    <SolidColorBrush x:Key="ErrorBrush" Color="{StaticResource Error}"/>
+    <SolidColorBrush x:Key="Gray100Brush" Color="{StaticResource Gray100}"/>
+    <SolidColorBrush x:Key="Gray200Brush" Color="{StaticResource Gray200}"/>
+    <SolidColorBrush x:Key="Gray300Brush" Color="{StaticResource Gray300}"/>
+    <SolidColorBrush x:Key="Gray400Brush" Color="{StaticResource Gray400}"/>
+    <SolidColorBrush x:Key="Gray500Brush" Color="{StaticResource Gray500}"/>
+    <SolidColorBrush x:Key="Gray600Brush" Color="{StaticResource Gray600}"/>
+    <SolidColorBrush x:Key="Gray900Brush" Color="{StaticResource Gray900}"/>
+    <SolidColorBrush x:Key="Gray950Brush" Color="{StaticResource Gray950}"/>
+    <SolidColorBrush x:Key="WhiteBrush" Color="{StaticResource White}"/>
+    <SolidColorBrush x:Key="BlackBrush" Color="{StaticResource Black}"/>
+    <!-- Blue Light Theme Styles -->
+    <Style TargetType="ContentPage" ApplyToDerivedTypes="True">
+        <Setter Property="BackgroundColor" Value="{StaticResource Background}" />
+    </Style>
+    <Style TargetType="Label">
+        <Setter Property="TextColor" Value="{StaticResource Gray900}" />
+        <Setter Property="FontFamily" Value="OpenSansRegular" />
+        <Setter Property="FontSize" Value="14" />
+    </Style>
+    <Style TargetType="Button">
+        <Setter Property="TextColor" Value="{StaticResource PrimaryText}" />
+        <Setter Property="BackgroundColor" Value="{StaticResource Primary}" />
+        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="FontFamily" Value="OpenSansRegular" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="Padding" Value="14,10" />
+    </Style>
+    <Style TargetType="Entry">
+        <Setter Property="TextColor" Value="{StaticResource Gray900}" />
+        <Setter Property="BackgroundColor" Value="{StaticResource Surface}" />
+        <Setter Property="PlaceholderColor" Value="{StaticResource Gray400}" />
+        <Setter Property="FontFamily" Value="OpenSansRegular" />
+        <Setter Property="FontSize" Value="14" />
+    </Style>
+    <Style TargetType="Picker">
+        <Setter Property="TextColor" Value="{StaticResource Gray900}" />
+        <Setter Property="TitleColor" Value="{StaticResource Gray400}" />
+        <Setter Property="BackgroundColor" Value="{StaticResource Surface}" />
+        <Setter Property="FontFamily" Value="OpenSansRegular" />
+        <Setter Property="FontSize" Value="14" />
+    </Style>
+    <Style TargetType="DatePicker">
+        <Setter Property="TextColor" Value="{StaticResource Gray900}" />
+        <Setter Property="BackgroundColor" Value="{StaticResource Surface}" />
+        <Setter Property="FontFamily" Value="OpenSansRegular" />
+        <Setter Property="FontSize" Value="14" />
+    </Style>
+    <Style TargetType="Frame">
+        <Setter Property="BackgroundColor" Value="{StaticResource Surface}" />
+        <Setter Property="BorderColor" Value="{StaticResource PrimaryLight}" />
+        <Setter Property="CornerRadius" Value="8" />
+    </Style>
+    <Style TargetType="CollectionView">
+        <Setter Property="BackgroundColor" Value="{StaticResource Surface}" />
+    </Style>
+    <Style TargetType="VerticalStackLayout">
+        <Setter Property="BackgroundColor" Value="{StaticResource Background}" />
+    </Style>
+    <Style TargetType="HorizontalStackLayout">
+        <Setter Property="BackgroundColor" Value="{StaticResource Background}" />
+    </Style>
+</ResourceDictionary>

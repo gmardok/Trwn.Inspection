@@ -52,7 +52,8 @@ namespace Trwn.Inspection.Mobile.ViewModels
             var currentPage = Application.Current?.Windows.FirstOrDefault();
             if (currentPage?.Page != null)
             {
-                currentPage.Page.ShowPopup(new FullScreenImagePopup(photoPath));
+                // todo: Use a custom popup for displaying full-screen images
+                // currentPage.Page.ShowPopup(new FullScreenImagePopup(photoPath));
             }
         }
 
@@ -91,19 +92,6 @@ namespace Trwn.Inspection.Mobile.ViewModels
                 if (_report.Name != value)
                 {
                     _report.Name = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        public string Inspector
-        {
-            get => _report.Inspector;
-            set
-            {
-                if (_report.Inspector != value)
-                {
-                    _report.Inspector = value;
                     OnPropertyChanged();
                 }
             }

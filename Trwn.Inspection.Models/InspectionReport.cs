@@ -15,7 +15,7 @@ namespace Trwn.Inspection.Models
         public string Supplier { get; set; } = null!;
         public string Factory { get; set; } = null!;
         public string InspectionPlace { get; set; } = null!;
-        public DateTime InspectionDate { get; set; }
+        public DateTime InspectionDate { get; set; } = DateTime.Now;
         public List<InspectionOrderArticle> InspectionOrder{ get; set; } = new List<InspectionOrderArticle>();
         public string QualityMark { get; set; } = null!;
         public string InspectionStandard { get; set; } = null!;
