@@ -19,7 +19,7 @@ namespace Trwn.Inspection.Mobile.Views
         public FullScreenImagePopupViewModel(string imageSource, Popup popup)
         {
             ImageSource = imageSource;
-            CloseCommand = new Command(() => popup.Close());
+            CloseCommand = new Command(() => popup.Focus());//popup.Close() todo: Use Close() to close the popup
         }
     }
 }
