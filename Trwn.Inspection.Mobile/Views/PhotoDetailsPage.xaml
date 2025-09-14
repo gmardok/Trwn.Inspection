@@ -4,16 +4,16 @@
              xmlns:viewModels="clr-namespace:Trwn.Inspection.Mobile.ViewModels"
              xmlns:converters="clr-namespace:Trwn.Inspection.Mobile.Converters"
              x:Class="Trwn.Inspection.Mobile.Views.PhotoDetailsPage"
-             x:DataType="viewModels:PhotoDetailsViewModel">
+             x:DataType="viewModels:InspectionReportViewModel">
     <ContentPage.Resources>
         <ResourceDictionary>
             <converters:PhotoTypeToStringConverter x:Key="PhotoTypeToStringConverter" />
         </ResourceDictionary>
     </ContentPage.Resources>
     <VerticalStackLayout Padding="10" Spacing="10">
-        <Label Text="{Binding PhotoType, Converter={StaticResource PhotoTypeToStringConverter}}" />
-        <Editor Placeholder="Enter photo description..." Text="{Binding PhotoDescription, Mode=TwoWay}" />
-        <Image Source="{Binding PhotoPath}" HeightRequest="200" WidthRequest="200" Aspect="AspectFill" />
+        <Label Text="{Binding CurrentDocumentation.PhotoType, Converter={StaticResource PhotoTypeToStringConverter}}" />
+        <Editor Placeholder="Enter photo description..." Text="{Binding CurrentDocumentation.Description, Mode=TwoWay}" />
+        <Image Source="{Binding CurrentDocumentation.PicturePath}" HeightRequest="200" WidthRequest="200" Aspect="AspectFill" />
         <Button Text="Take Photo" Command="{Binding TakePhotoCommand}" />
         <Button Text="Save" Command="{Binding SavePhotoDetailsCommand}" />
     </VerticalStackLayout>

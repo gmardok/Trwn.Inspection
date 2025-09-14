@@ -98,12 +98,12 @@ namespace Trwn.Inspection.Mobile.ViewModels
 
         public string Inspector
         {
-            get => _report.Inspector;
+            get => _report.InspectorName;
             set
             {
-                if (_report.Inspector != value)
+                if (_report.InspectorName != value)
                 {
-                    _report.Inspector = value;
+                    _report.InspectorName = value;
                     OnPropertyChanged();
                 }
             }

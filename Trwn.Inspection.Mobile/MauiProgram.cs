@@ -25,7 +25,9 @@ public static class MauiProgram
 #if ANDROID
         builder.Services.AddSingleton<IPhotoPickerService, Trwn.Inspection.Mobile.Platforms.Android.Services.PhotoPickerService>();
 #endif
-		builder.Services.AddTransient<PhotoDetailsViewModel>();
+		//builder.Services.AddSingleton<PhotoDetailsViewModel>();
+		builder.Services.AddSingleton<InspectionReportViewModel>();
+
 #if DEBUG
         builder.Logging.AddDebug();
 #endif

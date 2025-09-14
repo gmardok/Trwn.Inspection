@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:Trwn.Inspection.Mobile.ViewModels"
+             xmlns:cmp="clr-namespace:Trwn.Inspection.Mobile.Views.Components"
+             xmlns:local="clr-namespace:Trwn.Inspection.Models;assembly=Trwn.Inspection.Models"
+             x:Class="Trwn.Inspection.Mobile.Views.InspectionReportPage"
+             x:DataType="viewModels:InspectionReportViewModel"
+             Title="Inspection Report">
+    <ContentPage.BindingContext>
+        <viewModels:ReportViewModel />
+    </ContentPage.BindingContext>
+    <VerticalStackLayout Padding="10" Spacing="10">
+        <cmp:ReportType Value="{Binding ReportType, Mode=TwoWay}" />
+        <Border
+            Padding="0"
+            Margin="16,8,16,0"
+            Background="{DynamicResource CardBackgroundColor}"
+            Stroke="#e0e0e0"
+            StrokeThickness="1">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="12" />
+            </Border.StrokeShape>
+            <Grid ColumnDefinitions="*,Auto" HeightRequest="48">
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding NavigateToDetailsCommand}" />
+                </Grid.GestureRecognizers>
+                <Label Text="Inspection Details"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Start"
+                       Margin="16,0"
+                       FontSize="16"
+                       TextColor="Black"/>
+                <Label Text="&#x203A;"
+                       VerticalOptions="Center"
+                       HorizontalOptions="End"
+                       Margin="0,0,16,0"
+                       FontSize="20"
+                       TextColor="#888"
+                       Grid.Column="1"/>
+            </Grid>
+        </Border>
+        <Border
+            Padding="0"
+            Margin="16,8,16,0"
+            Background="{DynamicResource CardBackgroundColor}"
+            Stroke="#e0e0e0"
+            StrokeThickness="1">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="12" />
+            </Border.StrokeShape>
+            <Grid ColumnDefinitions="*,Auto" HeightRequest="48">
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding NavigateToItemsCommand}" />
+                </Grid.GestureRecognizers>
+                <Label Text="Inspection Items"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Start"
+                       Margin="16,0"
+                       FontSize="16"
+                       TextColor="Black"/>
+                <Label Text="&#x203A;"
+                       VerticalOptions="Center"
+                       HorizontalOptions="End"
+                       Margin="0,0,16,0"
+                       FontSize="20"
+                       TextColor="#888"
+                       Grid.Column="1"/>
+            </Grid>
+        </Border>
+        <Border
+            Padding="0"
+            Margin="16,8,16,0"
+            Background="{DynamicResource CardBackgroundColor}"
+            Stroke="#e0e0e0"
+            StrokeThickness="1">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="12" />
+            </Border.StrokeShape>
+            <Grid ColumnDefinitions="*,Auto" HeightRequest="48">
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding NavigateToGeneralCommand}" />
+                </Grid.GestureRecognizers>
+                <Label Text="General"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Start"
+                       Margin="16,0"
+                       FontSize="16"
+                       TextColor="Black"/>
+                <Label Text="&#x203A;"
+                       VerticalOptions="Center"
+                       HorizontalOptions="End"
+                       Margin="0,0,16,0"
+                       FontSize="20"
+                       TextColor="#888"
+                       Grid.Column="1"/>
+            </Grid>
+        </Border>
+        <Border
+            Padding="0"
+            Margin="16,8,16,0"
+            Background="{DynamicResource CardBackgroundColor}"
+            Stroke="#e0e0e0"
+            StrokeThickness="1">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="12" />
+            </Border.StrokeShape>
+            <Grid ColumnDefinitions="*,Auto" HeightRequest="48">
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding NavigateToDefectsCommand}" CommandParameter="{x:Static local:PhotoType.Major}" />
+                </Grid.GestureRecognizers>
+                <Label Text="Major defects"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Start"
+                       Margin="16,0"
+                       FontSize="16"
+                       TextColor="Black"/>
+                <Label Text="&#x203A;"
+                       VerticalOptions="Center"
+                       HorizontalOptions="End"
+                       Margin="0,0,16,0"
+                       FontSize="20"
+                       TextColor="#888"
+                       Grid.Column="1"/>
+            </Grid>
+        </Border>
+        <Border
+            Padding="0"
+            Margin="16,8,16,0"
+            Background="{DynamicResource CardBackgroundColor}"
+            Stroke="#e0e0e0"
+            StrokeThickness="1">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="12" />
+            </Border.StrokeShape>
+            <Grid ColumnDefinitions="*,Auto" HeightRequest="48">
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding NavigateToDefectsCommand}" CommandParameter="{x:Static local:PhotoType.Minor}" />
+                </Grid.GestureRecognizers>
+                <Label Text="Minor defects"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Start"
+                       Margin="16,0"
+                       FontSize="16"
+                       TextColor="Black"/>
+                <Label Text="&#x203A;"
+                       VerticalOptions="Center"
+                       HorizontalOptions="End"
+                       Margin="0,0,16,0"
+                       FontSize="20"
+                       TextColor="#888"
+                       Grid.Column="1"/>
+            </Grid>
+        </Border>
+        <Border
+            Padding="0"
+            Margin="16,8,16,0"
+            Background="{DynamicResource CardBackgroundColor}"
+            Stroke="#e0e0e0"
+            StrokeThickness="1">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="12" />
+            </Border.StrokeShape>
+            <Grid ColumnDefinitions="*,Auto" HeightRequest="48">
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding NavigateToDefectsCommand}" CommandParameter="{x:Static local:PhotoType.ShippingMark}" />
+                </Grid.GestureRecognizers>
+                <Label Text="Shipping marks"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Start"
+                       Margin="16,0"
+                       FontSize="16"
+                       TextColor="Black"/>
+                <Label Text="&#x203A;"
+                       VerticalOptions="Center"
+                       HorizontalOptions="End"
+                       Margin="0,0,16,0"
+                       FontSize="20"
+                       TextColor="#888"
+                       Grid.Column="1"/>
+            </Grid>
+        </Border>
+        <Border
+            Padding="0"
+            Margin="16,8,16,0"
+            Background="{DynamicResource CardBackgroundColor}"
+            Stroke="#e0e0e0"
+            StrokeThickness="1">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="12" />
+            </Border.StrokeShape>
+            <Grid ColumnDefinitions="*,Auto" HeightRequest="48">
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding NavigateToDefectsCommand}" CommandParameter="{x:Static local:PhotoType.Packaging}" />
+                </Grid.GestureRecognizers>
+                <Label Text="Packaging"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Start"
+                       Margin="16,0"
+                       FontSize="16"
+                       TextColor="Black"/>
+                <Label Text="&#x203A;"
+                       VerticalOptions="Center"
+                       HorizontalOptions="End"
+                       Margin="0,0,16,0"
+                       FontSize="20"
+                       TextColor="#888"
+                       Grid.Column="1"/>
+            </Grid>
+        </Border>
+        <Border
+            Padding="0"
+            Margin="16,8,16,0"
+            Background="{DynamicResource CardBackgroundColor}"
+            Stroke="#e0e0e0"
+            StrokeThickness="1">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="12" />
+            </Border.StrokeShape>
+            <Grid ColumnDefinitions="*,Auto" HeightRequest="48">
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding NavigateToDefectsCommand}" CommandParameter="{x:Static local:PhotoType.PackageWithDeffects}" />
+                </Grid.GestureRecognizers>
+                <Label Text="Packages with deffects"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Start"
+                       Margin="16,0"
+                       FontSize="16"
+                       TextColor="Black"/>
+                <Label Text="&#x203A;"
+                       VerticalOptions="Center"
+                       HorizontalOptions="End"
+                       Margin="0,0,16,0"
+                       FontSize="20"
+                       TextColor="#888"
+                       Grid.Column="1"/>
+            </Grid>
+        </Border>
+    </VerticalStackLayout>
+</ContentPage>

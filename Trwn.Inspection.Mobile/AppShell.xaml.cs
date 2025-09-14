@@ -7,8 +7,11 @@ namespace Trwn.Inspection.Mobile
         public AppShell()
         {
             InitializeComponent();
-            Routing.RegisterRoute("Report", typeof(ReportPage));
-            Routing.RegisterRoute("Report/PhotoDetailsPage", typeof(PhotoDetailsPage));
+            Routing.RegisterRoute(nameof(PhotoDetailsPage), typeof(PhotoDetailsPage));
+            Routing.RegisterRoute(nameof(InspectionReportDetailsPage), typeof(InspectionReportDetailsPage));
+            Routing.RegisterRoute(nameof(InspectionReportGeneralPage), typeof(InspectionReportGeneralPage));
+            Routing.RegisterRoute(nameof(InspectionReportItemsPage), typeof(InspectionReportItemsPage));
+            Routing.RegisterRoute(nameof(InspectionReportDefectsPage), typeof(InspectionReportDefectsPage));
         }
     }
 }

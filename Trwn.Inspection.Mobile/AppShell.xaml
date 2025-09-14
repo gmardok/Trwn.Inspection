@@ -9,9 +9,9 @@
 
     <TabBar>
         <ShellContent
-            Title="Report"
-            Route="Report"
-            ContentTemplate="{DataTemplate local:ReportPage}"
+            Title="Inspection Report"
+            Route="InspectionReportPage"
+            ContentTemplate="{DataTemplate local:InspectionReportPage}"
             Icon="{OnPlatform 'report.png', iOS='icon_notes_ios.png', MacCatalyst='report.png'}" />
 
         <ShellContent

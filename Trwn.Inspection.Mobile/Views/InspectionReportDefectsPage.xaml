@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Trwn.Inspection.Mobile.Views.InspectionReportDefectsPage"
+             Title="InspectionReportDefectsPage"
+             xmlns:local="clr-namespace:Trwn.Inspection.Models;assembly=Trwn.Inspection.Models"
+             xmlns:viewModels="clr-namespace:Trwn.Inspection.Mobile.ViewModels"
+             x:DataType="viewModels:InspectionReportViewModel">
+    <ScrollView>
+        <VerticalStackLayout Padding="10" Spacing="10">
+            <CollectionView ItemsSource="{Binding Defects}"
+                                        Grid.Row="1"
+                                        Grid.ColumnSpan="3"
+                                        Grid.RowSpan="2"
+                                        Margin="10" >
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout ItemSpacing="10" Orientation="Vertical"/>
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="local:PhotoDocumentation">
+                        <HorizontalStackLayout Spacing="10">
+                            <Image Source="{Binding PicturePath}" HeightRequest="100" WidthRequest="100" Aspect="AspectFill">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding BindingContext.EnlargePhotoCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}" CommandParameter="{Binding PicturePath}" />
+                                </Image.GestureRecognizers>
+                            </Image>
+                            <Label Text="{Binding Description}" VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            <Button Text="Add" Command="{Binding NavigateToPhotoDetailsCommand}" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

@@ -40,7 +40,7 @@ namespace Trwn.Inspection.Infrastructure
             {
                 existingReport.InspectionType = report.InspectionType;
                 existingReport.Name = report.Name;
-                existingReport.Inspector = report.Inspector;
+                existingReport.InspectorName = report.InspectorName;
                 existingReport.ReportNo = report.ReportNo;
                 existingReport.Client = report.Client;
                 existingReport.ContractNo = report.ContractNo;
@@ -60,8 +60,8 @@ namespace Trwn.Inspection.Infrastructure
                 existingReport.InspectionResult = report.InspectionResult;
                 existingReport.InspectorName = report.InspectorName;
                 existingReport.FactoryRepresentative = report.FactoryRepresentative;
-                existingReport.InspectionDefects = report.InspectionDefects;
-                existingReport.Remarks = report.Remarks;
+                /*existingReport.InspectionDefects = report.InspectionDefects;
+                existingReport.Remarks = report.Remarks;*/
                 existingReport.ProductionStatus = report.ProductionStatus;
                 existingReport.ListOfDocuments = report.ListOfDocuments;
                 existingReport.PhotoDocumentation = report.PhotoDocumentation;

@@ -39,8 +39,8 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(TargetFramework)'=='net9.0-ios'">
-	  <CodesignKey>Apple Development: Created via API (ATHUD8UH2C)</CodesignKey>
-	  <CodesignProvision>VS: WildCard Development</CodesignProvision>
+	  <CodesignKey>Apple Development: Created via API (W8XJN9GK2C)</CodesignKey>
+	  <CodesignProvision>VS: com.companyname.trwn.inspection.mobile Development</CodesignProvision>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -93,6 +93,21 @@
 	  <MauiXaml Update="Views\FullScreenImagePopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\InspectionReportDefectsPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\InspectionReportDetailsPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\InspectionReportGeneralPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\InspectionReportItemsPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\InspectionReportPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\PhotoDetailsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -104,6 +119,9 @@
 	<ItemGroup>
 	  <Compile Update="Views\Components\CheckBoxLabeled.xaml.cs">
 	    <DependentUpon>CheckBoxLabeled.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\InspectionReportDetailsPage.xaml.cs">
+	    <DependentUpon>InspectionReportDetailsPage.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 	<ItemGroup>

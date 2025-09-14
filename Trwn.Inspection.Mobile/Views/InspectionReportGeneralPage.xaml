@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Trwn.Inspection.Mobile.Views.InspectionReportGeneralPage"
+             Title="InspectionReportGeneralPage"
+             xmlns:viewModels="clr-namespace:Trwn.Inspection.Mobile.ViewModels"
+             x:DataType="viewModels:InspectionReportViewModel">
+    <ScrollView>
+        <VerticalStackLayout Padding="10" Spacing="10">
+            <Label Text="Quality Mark" />
+            <Entry Placeholder="Quality Mark" Text="{Binding QualityMark, Mode=TwoWay}" />
+            <Label Text="Inspection Standard" />
+            <Entry Placeholder="Inspection Standard" Text="{Binding InspectionStandard, Mode=TwoWay}" />
+            <Label Text="Sampling Standard" />
+            <Entry Placeholder="Inspection Sampling" Text="{Binding InspectionSampling, Mode=TwoWay}" />
+            <Label Text="Inspection Quantity" />
+            <Entry Placeholder="Inspection Quantity" Text="{Binding InspectionQuantity, Mode=TwoWay}" Keyboard="Numeric" />
+            <Label Text="Sample Size" />
+            <Entry Placeholder="Sample Size" Text="{Binding SampleSize, Mode=TwoWay}" Keyboard="Numeric" />
+            <Label Text="Inspection Carton No" />
+            <Entry Placeholder="Inspection Carton No" Text="{Binding InspectionCartonNo, Mode=TwoWay}" />
+            <Label Text="Inspection Result" />
+            <Picker ItemsSource="{Binding InspectionResultTypes}" SelectedItem="{Binding InspectionResult, Mode=TwoWay}">
+                <Picker.ItemDisplayBinding>
+                    <Binding Path="." />
+                </Picker.ItemDisplayBinding>
+            </Picker>
+            <Label Text="Inspector Name" />
+            <Entry Placeholder="Inspector Name" Text="{Binding InspectorName, Mode=TwoWay}" />
+            <Label Text="Factory Representative" />
+            <Entry Placeholder="Factory Representative" Text="{Binding FactoryRepresentative, Mode=TwoWay}" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

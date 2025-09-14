@@ -4,9 +4,9 @@ namespace Trwn.Inspection.Mobile.Views;
 
 public partial class PhotoDetailsPage : ContentPage
 {
-	public PhotoDetailsPage(PhotoDetailsViewModel viewModel)
-	{
-		InitializeComponent();
+	public PhotoDetailsPage(InspectionReportViewModel viewModel)
+    {
+        InitializeComponent();
         BindingContext = viewModel;
     }
 }

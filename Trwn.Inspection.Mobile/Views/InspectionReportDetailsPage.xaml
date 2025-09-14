@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:Trwn.Inspection.Mobile.ViewModels"
+             x:Class="Trwn.Inspection.Mobile.Views.InspectionReportDetailsPage"
+             x:DataType="viewModels:InspectionReportViewModel"
+             Title="Inspection Details">
+    <ScrollView>
+        <VerticalStackLayout Padding="10" Spacing="10">
+            <Label Text="Report No" />
+            <Entry Placeholder="Report No" Text="{Binding ReportNo, Mode=TwoWay}" />
+            <Label Text="Client" />
+            <Entry Placeholder="Client" Text="{Binding Client, Mode=TwoWay}" />
+            <Label Text="Contract No" />
+            <Entry Placeholder="Contract No" Text="{Binding ContractNo, Mode=TwoWay}" />
+            <Label Text="Article Name" />
+            <Entry Placeholder="Article Name" Text="{Binding ArticleName, Mode=TwoWay}" />
+            <Label Text="Supplier" />
+            <Entry Placeholder="Supplier" Text="{Binding Supplier, Mode=TwoWay}" />
+            <Label Text="Factory" />
+            <Entry Placeholder="Factory" Text="{Binding Factory, Mode=TwoWay}" />
+            <Label Text="Inspection Place" />
+            <Entry Placeholder="Inspection Place" Text="{Binding InspectionPlace, Mode=TwoWay}" />
+            <Label Text="Inspection Date" />
+            <DatePicker Date="{Binding InspectionDate, Mode=TwoWay}" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
