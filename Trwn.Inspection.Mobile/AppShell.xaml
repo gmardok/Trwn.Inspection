@@ -6,18 +6,17 @@
     xmlns:local="clr-namespace:Trwn.Inspection.Mobile.Views"
     Shell.FlyoutBehavior="Disabled"
     Title="Inspection Reports">
-
     <TabBar>
+        <ShellContent
+            Title="All Reports"
+            ContentTemplate="{DataTemplate local:AllReportsPage}"
+            Icon="{OnPlatform 'report_list.png', iOS='icon_about_ios.png', MacCatalyst='report_list.png'}" />
+
         <ShellContent
             Title="Inspection Report"
             Route="InspectionReportPage"
             ContentTemplate="{DataTemplate local:InspectionReportPage}"
             Icon="{OnPlatform 'report.png', iOS='icon_notes_ios.png', MacCatalyst='report.png'}" />
-
-        <ShellContent
-            Title="All Reports"
-            ContentTemplate="{DataTemplate local:AllReportsPage}"
-            Icon="{OnPlatform 'report_list.png', iOS='icon_about_ios.png', MacCatalyst='report_list.png'}" />
     </TabBar>
 
 </Shell>

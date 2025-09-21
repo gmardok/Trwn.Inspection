@@ -1,13 +1,8 @@
 ﻿using CommunityToolkit.Maui.Views;
 using CommunityToolkit.Mvvm.Input;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using Trwn.Inspection.Mobile.Services;
 using Trwn.Inspection.Mobile.Views;
@@ -18,6 +13,8 @@ namespace Trwn.Inspection.Mobile.ViewModels
     public partial class InspectionReportViewModel : INotifyPropertyChanged
     {
         private readonly IPhotoPickerService _photoPickerService;
+
+        private PersistanceService _persistanceService;
 
         #region Fields
         private InspectionReport _report;
@@ -288,6 +285,8 @@ namespace Trwn.Inspection.Mobile.ViewModels
                 InspectionResult = InspectionResultType.Passes
             };
 
+            _persistanceService = new PersistanceService();
+
             AddInspectionOrderArticleCommand = new RelayCommand(AddInspectionOrderArticle);
             EnlargePhotoCommand = new RelayCommand<string>(EnlargePhoto);
             _photoPickerService = photoPickerService;
@@ -315,10 +314,29 @@ namespace Trwn.Inspection.Mobile.ViewModels
             }*/
         }
 
+        public void LoadReport(string fileName)
+        {
+            _report = _persistanceService.Load(fileName);
+            OnPropertyChanged(string.Empty);
+        }
+
+        public void NewReport()
+        {
+            _report = new InspectionReport
+            {
+                InspectionResult = InspectionResultType.Passes
+            };
+
+            _persistanceService = new PersistanceService();
+
+            OnPropertyChanged(string.Empty);
+        }
+
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            _persistanceService.Save(_report);
         }
 
         #region details methods

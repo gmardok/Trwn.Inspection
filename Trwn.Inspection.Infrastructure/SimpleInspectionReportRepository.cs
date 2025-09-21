@@ -39,8 +39,6 @@ namespace Trwn.Inspection.Infrastructure
             if (existingReport != null)
             {
                 existingReport.InspectionType = report.InspectionType;
-                existingReport.Name = report.Name;
-                existingReport.InspectorName = report.InspectorName;
                 existingReport.ReportNo = report.ReportNo;
                 existingReport.Client = report.Client;
                 existingReport.ContractNo = report.ContractNo;
@@ -56,14 +54,9 @@ namespace Trwn.Inspection.Infrastructure
                 existingReport.InspectionQuantity = report.InspectionQuantity;
                 existingReport.SampleSize = report.SampleSize;
                 existingReport.InspectionCartonNo = report.InspectionCartonNo;
-                existingReport.DefectsSummary = report.DefectsSummary;
                 existingReport.InspectionResult = report.InspectionResult;
                 existingReport.InspectorName = report.InspectorName;
                 existingReport.FactoryRepresentative = report.FactoryRepresentative;
-                /*existingReport.InspectionDefects = report.InspectionDefects;
-                existingReport.Remarks = report.Remarks;*/
-                existingReport.ProductionStatus = report.ProductionStatus;
-                existingReport.ListOfDocuments = report.ListOfDocuments;
                 existingReport.PhotoDocumentation = report.PhotoDocumentation;
             }
             return Task.FromResult(existingReport);

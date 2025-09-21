@@ -15,6 +15,5 @@
         <Editor Placeholder="Enter photo description..." Text="{Binding CurrentDocumentation.Description, Mode=TwoWay}" />
         <Image Source="{Binding CurrentDocumentation.PicturePath}" HeightRequest="200" WidthRequest="200" Aspect="AspectFill" />
         <Button Text="Take Photo" Command="{Binding TakePhotoCommand}" />
-        <Button Text="Save" Command="{Binding SavePhotoDetailsCommand}" />
     </VerticalStackLayout>
 </ContentPage>

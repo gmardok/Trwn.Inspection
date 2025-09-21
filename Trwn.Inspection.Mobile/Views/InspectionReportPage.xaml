@@ -7,9 +7,6 @@
              x:Class="Trwn.Inspection.Mobile.Views.InspectionReportPage"
              x:DataType="viewModels:InspectionReportViewModel"
              Title="Inspection Report">
-    <ContentPage.BindingContext>
-        <viewModels:ReportViewModel />
-    </ContentPage.BindingContext>
     <VerticalStackLayout Padding="10" Spacing="10">
         <cmp:ReportType Value="{Binding ReportType, Mode=TwoWay}" />
         <Border

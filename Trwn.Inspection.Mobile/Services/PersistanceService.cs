@@ -5,35 +5,50 @@ namespace Trwn.Inspection.Mobile.Services
 {
     public class PersistanceService
     {
+        private const string FileSufix = ".report.txt";
+
         private string _fileName;
 
         public PersistanceService()
         {
-            _fileName = $"{DateTime.Now:yyyyMMdd_HHmmss}.report.txt";
+            _fileName = $"{DateTime.Now:yyyyMMdd_HHmmss}{FileSufix}";
         }
-        public Task Save(InspectionReport report)
+
+        public string Save(InspectionReport report)
         {
             var data = JsonSerializer.Serialize(report);
-            return File.WriteAllTextAsync(System.IO.Path.Combine(FileSystem.AppDataDirectory, _fileName), data);
+            File.WriteAllText(Path.Combine(FileSystem.AppDataDirectory, _fileName), data);
+            return _fileName;
         }
 
-        public async Task<InspectionReport> Load(string filename)
+        public InspectionReport Load(string fileName)
         {
-            filename = Path.Combine(FileSystem.AppDataDirectory, filename);
+            _fileName = fileName.EndsWith(FileSufix, StringComparison.InvariantCultureIgnoreCase) ? fileName : $"{fileName}{FileSufix}";
 
-            if (!File.Exists(filename))
-                throw new FileNotFoundException("Unable to find file on local storage.", filename);
+            fileName = Path.Combine(FileSystem.AppDataDirectory, _fileName);
 
-            var data = await File.ReadAllTextAsync(filename);
+            if (!File.Exists(fileName))
+                throw new FileNotFoundException("Unable to find file on local storage.", fileName);
+
+            var data = File.ReadAllText(fileName);
             var result = JsonSerializer.Deserialize<InspectionReport>(data);
 
             if (result == null)
             {
-                File.Delete(filename);
+                File.Delete(fileName);
                 throw new InvalidOperationException("Unable to deserialize report data.");
             }
 
             return result;
+        }
+
+        public List<string> GetLocalReports()
+        {
+            var files = Directory.GetFiles(FileSystem.AppDataDirectory, $"*{FileSufix}");
+            return files
+                .OrderByDescending(f => new FileInfo(f).LastWriteTime)
+                .Select(f => Path.GetFileName(f).TrimEnd(FileSufix.ToCharArray()))
+                .ToList();
         }
     }
 }

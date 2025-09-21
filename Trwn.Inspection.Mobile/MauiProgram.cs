@@ -27,6 +27,7 @@ public static class MauiProgram
 #endif
 		//builder.Services.AddSingleton<PhotoDetailsViewModel>();
 		builder.Services.AddSingleton<InspectionReportViewModel>();
+		builder.Services.AddSingleton<AllReportViewModel>();
 
 #if DEBUG
         builder.Logging.AddDebug();
