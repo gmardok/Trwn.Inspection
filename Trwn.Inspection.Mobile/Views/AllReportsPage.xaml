@@ -7,24 +7,19 @@
              Title="Reports">
     <ScrollView>
         <VerticalStackLayout Padding="10" Spacing="10">
-            <CollectionView ItemsSource="{Binding LocalReports}">
+            <CollectionView
+                SelectionMode="Single"
+                ItemsSource="{Binding LocalReports}"
+                SelectedItem="{Binding SelectedReport}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="x:String">
-                        <Label 
-                    Text="{Binding .}" 
-                    FontSize="20"
-                    Padding="10"/>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-            <CollectionView ItemsSource="{Binding LocalReports}">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Label Text="{Binding .}" />
+                        <Label Text="{Binding .}" FontSize="20" Padding="10"/>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
             <Button Text="New report" Command="{Binding NewReportCommand}" />
+            <Button Text="Open report" Command="{Binding OpenReportCommand}" />
+            <Button Text="Upload report to server" Command="{Binding UploadReportCommand}" />            
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

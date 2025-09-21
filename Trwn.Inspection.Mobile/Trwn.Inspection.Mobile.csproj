@@ -2,6 +2,8 @@
 
 	<PropertyGroup>
 		<TargetFrameworks>net9.0-android;net9.0-ios;net9.0-maccatalyst</TargetFrameworks>
+		<!--TargetFrameworks>net9.0-android</TargetFrameworks>
+		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('osx'))">$(TargetFrameworks);net9.0-ios;net9.0-maccatalyst</TargetFrameworks-->
 		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net9.0-windows10.0.19041.0</TargetFrameworks>
 		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
 		<!-- <TargetFrameworks>$(TargetFrameworks);net8.0-tizen</TargetFrameworks> -->
@@ -41,6 +43,7 @@
 	<PropertyGroup Condition="'$(TargetFramework)'=='net9.0-ios'">
 	  <CodesignKey>Apple Development: Created via API (W8XJN9GK2C)</CodesignKey>
 	  <CodesignProvision>VS: com.companyname.trwn.inspection.mobile Development</CodesignProvision>
+	  <EnableHotRestart>false</EnableHotRestart>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -68,10 +71,17 @@
 		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.60" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="9.0.60" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.4" />
+		<PackageReference Include="System.Security.Cryptography.Pkcs" Version="8.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <ProjectReference Include="..\Trwn.Inspection.Models\Trwn.Inspection.Models.csproj" />
+	  <ProjectReference Include="..\Trwn.Inspection.WebClient\Trwn.Inspection.WebClient.csproj" />
+	</ItemGroup>
+
+	<!-- Android specific resources -->
+	<ItemGroup Condition="'$(TargetFramework)' == 'net9.0-android'">
+		<AndroidResource Include="Resources\xml\file_paths.xml" />
 	</ItemGroup>
 
 	<ItemGroup>

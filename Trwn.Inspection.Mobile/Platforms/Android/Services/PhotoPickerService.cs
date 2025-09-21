@@ -11,12 +11,12 @@ namespace Trwn.Inspection.Mobile.Platforms.Android.Services
 {
     public class PhotoPickerService : IPhotoPickerService
     {
-        private TaskCompletionSource<string> _photoTaskCompletionSource;
-        private string _currentPhotoPath;
+        private TaskCompletionSource<string?>? _photoTaskCompletionSource;
+        private string? _currentPhotoPath;
 
-        public Task<string> TakePhotoAsync()
+        public Task<string?> TakePhotoAsync()
         {
-            _photoTaskCompletionSource = new TaskCompletionSource<string>();
+            _photoTaskCompletionSource = new TaskCompletionSource<string?>();
 
             var activity = Platform.CurrentActivity ?? throw new InvalidOperationException("No current activity");
 
@@ -35,7 +35,7 @@ namespace Trwn.Inspection.Mobile.Platforms.Android.Services
                 })
                 .SetNegativeButton("Cancel", (sender, args) =>
                 {
-                    _photoTaskCompletionSource.SetResult(null);
+                    _photoTaskCompletionSource?.SetResult(null);
                 })
                 .Create();
 
@@ -50,10 +50,13 @@ namespace Trwn.Inspection.Mobile.Platforms.Android.Services
 
             var intent = new Intent(MediaStore.ActionImageCapture);
             var photoFile = CreateImageFile();
-            _currentPhotoPath = photoFile.AbsolutePath;
+            _currentPhotoPath = photoFile?.AbsolutePath;
 
-            var photoUri = AndroidX.Core.Content.FileProvider.GetUriForFile(activity, $"{activity.PackageName}.fileprovider", photoFile);
-            intent.PutExtra(MediaStore.ExtraOutput, photoUri);
+            if (photoFile != null)
+            {
+                var photoUri = AndroidX.Core.Content.FileProvider.GetUriForFile(activity, $"{activity.PackageName}.fileprovider", photoFile);
+                intent.PutExtra(MediaStore.ExtraOutput, photoUri);
+            }
 
             activity.StartActivityForResult(intent, 1001);
         }
@@ -68,7 +71,7 @@ namespace Trwn.Inspection.Mobile.Platforms.Android.Services
             activity.StartActivityForResult(intent, 1002);
         }
 
-        public void OnActivityResult(int requestCode, Result resultCode, Intent data)
+        public void OnActivityResult(int requestCode, Result resultCode, Intent? data)
         {
             if (requestCode == 1001 && resultCode == Result.Ok)
             {
@@ -80,16 +83,30 @@ namespace Trwn.Inspection.Mobile.Platforms.Android.Services
                 // Gallery result
                 var activity = Platform.CurrentActivity ?? throw new InvalidOperationException("No current activity");
 
-                var inputStream = activity.ContentResolver.OpenInputStream(data.Data);
-                var documentsPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments);
-                var filePath = Path.Combine(documentsPath, $"{Guid.NewGuid()}.jpg");
-
-                using (var outputStream = File.Create(filePath))
+                try
                 {
-                    inputStream.CopyTo(outputStream);
-                }
+                    var inputStream = activity.ContentResolver?.OpenInputStream(data.Data);
+                    if (inputStream != null)
+                    {
+                        var documentsPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments);
+                        var filePath = Path.Combine(documentsPath, $"{Guid.NewGuid()}.jpg");
 
-                _photoTaskCompletionSource?.SetResult(filePath);
+                        using (var outputStream = File.Create(filePath))
+                        {
+                            inputStream.CopyTo(outputStream);
+                        }
+
+                        _photoTaskCompletionSource?.SetResult(filePath);
+                    }
+                    else
+                    {
+                        _photoTaskCompletionSource?.SetResult(null);
+                    }
+                }
+                catch (Exception)
+                {
+                    _photoTaskCompletionSource?.SetResult(null);
+                }
             }
             else
             {
@@ -97,10 +114,18 @@ namespace Trwn.Inspection.Mobile.Platforms.Android.Services
             }
         }
 
-        private Java.IO.File CreateImageFile()
+        private Java.IO.File? CreateImageFile()
         {
-            var storageDir = Platform.CurrentActivity.GetExternalFilesDir(Env.DirectoryPictures);
-            return Java.IO.File.CreateTempFile($"photo_{Guid.NewGuid()}", ".jpg", storageDir);
+            try
+            {
+                var activity = Platform.CurrentActivity;
+                var storageDir = activity?.GetExternalFilesDir(Env.DirectoryPictures);
+                return storageDir != null ? Java.IO.File.CreateTempFile($"photo_{Guid.NewGuid()}", ".jpg", storageDir) : null;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
     }
 }

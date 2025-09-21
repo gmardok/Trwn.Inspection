@@ -13,10 +13,26 @@ namespace Trwn.Inspection.Mobile.ViewModels
         private readonly InspectionReportViewModel _inspectionReportViewModel;
 
         public ObservableCollection<string> LocalReports { get; set; }
-
-        public AllReportViewModel(InspectionReportViewModel inspectionReportViewModel)
+        
+        private string _selectedReport;
+        public string SelectedReport
         {
-            _persistanceService = new PersistanceService();
+            get => _selectedReport;
+            set
+            {
+                if (_selectedReport != value)
+                {
+                    _selectedReport = value;
+                    //OnPropertyChanged(nameof(SelectedReport));
+                    OpenReportCommand.NotifyCanExecuteChanged();
+                    UploadReportCommand.NotifyCanExecuteChanged();
+                }
+            }
+        }
+
+        public AllReportViewModel(InspectionReportViewModel inspectionReportViewModel, PersistanceService persistanceService)
+        {
+            _persistanceService = persistanceService;
             LocalReports = new ObservableCollection<string>( _persistanceService.GetLocalReports());
             _inspectionReportViewModel = inspectionReportViewModel;
         }
@@ -34,6 +50,26 @@ namespace Trwn.Inspection.Mobile.ViewModels
             _inspectionReportViewModel.NewReport();
 
             await Shell.Current.GoToAsync("///InspectionReportPage");
+        }
+
+        [RelayCommand(CanExecute = nameof(CanExecuteReportCommands))]
+        private async Task OpenReportAsync()
+        {
+            _inspectionReportViewModel.LoadReport(SelectedReport);
+
+            await Shell.Current.GoToAsync("///InspectionReportPage");
+        }
+        
+        [RelayCommand(CanExecute = nameof(CanExecuteReportCommands))]
+        private async Task UploadReportAsync()
+        {
+            var report = _persistanceService.Load(SelectedReport);
+            await _persistanceService.UploadReportAsync(report);
+        }
+
+        private bool CanExecuteReportCommands()
+        {
+            return !string.IsNullOrEmpty(SelectedReport);
         }
     }
 }

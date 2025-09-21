@@ -10,11 +10,11 @@ namespace Trwn.Inspection.Mobile.Platforms.iOS.Services
 {
     public class PhotoPickerService : IPhotoPickerService
     {
-        private TaskCompletionSource<string> _photoTaskCompletionSource;
+        private TaskCompletionSource<string?>? _photoTaskCompletionSource;
 
-        public Task<string> TakePhotoAsync()
+        public Task<string?> TakePhotoAsync()
         {
-            _photoTaskCompletionSource = new TaskCompletionSource<string>();
+            _photoTaskCompletionSource = new TaskCompletionSource<string?>();
 
             var window = UIApplication.SharedApplication.KeyWindow;
             var viewController = window?.RootViewController;
@@ -33,7 +33,7 @@ namespace Trwn.Inspection.Mobile.Platforms.iOS.Services
 
             actionSheet.AddAction(UIAlertAction.Create("Cancel", UIAlertActionStyle.Cancel, _ =>
             {
-                _photoTaskCompletionSource.SetResult(null);
+                _photoTaskCompletionSource?.SetResult(null);
             }));
 
             viewController?.PresentViewController(actionSheet, true, null);
@@ -41,7 +41,7 @@ namespace Trwn.Inspection.Mobile.Platforms.iOS.Services
             return _photoTaskCompletionSource.Task;
         }
 
-        private Task<string> ShowPickerAsync(UIImagePickerControllerSourceType sourceType)
+        private Task<string?> ShowPickerAsync(UIImagePickerControllerSourceType sourceType)
         {
             var picker = new UIImagePickerController
             {
@@ -56,7 +56,7 @@ namespace Trwn.Inspection.Mobile.Platforms.iOS.Services
             var viewController = window?.RootViewController;
             viewController?.PresentViewController(picker, true, null);
 
-            return _photoTaskCompletionSource.Task;
+            return _photoTaskCompletionSource?.Task ?? Task.FromResult<string?>(null);
         }
 
         private void OnFinishedPickingMedia(object sender, UIImagePickerMediaPickedEventArgs e)
@@ -73,12 +73,12 @@ namespace Trwn.Inspection.Mobile.Platforms.iOS.Services
                 using (var data = image.AsJPEG())
                 {
                     File.WriteAllBytes(filePath, data.ToArray());
-                    _photoTaskCompletionSource.SetResult(filePath);
+                    _photoTaskCompletionSource?.SetResult(filePath);
                 }
             }
             else
             {
-                _photoTaskCompletionSource.SetResult(null);
+                _photoTaskCompletionSource?.SetResult(null);
             }
         }
 
@@ -87,7 +87,7 @@ namespace Trwn.Inspection.Mobile.Platforms.iOS.Services
             var picker = sender as UIImagePickerController;
             picker?.DismissViewController(true, null);
 
-            _photoTaskCompletionSource.SetResult(null);
+            _photoTaskCompletionSource?.SetResult(null);
         }
     }
 }

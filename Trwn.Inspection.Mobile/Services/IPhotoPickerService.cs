@@ -2,6 +2,6 @@
 {
     public interface IPhotoPickerService
     {
-        Task<string> TakePhotoAsync();
+        Task<string?> TakePhotoAsync();
     }
 }
