@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace Trwn.Inspection.Models
 {
     public class PhotoDocumentation
     {
         public int Id { get; set; }
+        public int InspectionReportId { get; set; }
         public PhotoType PhotoType { get; set; }
         public int Code { get; set; }
         public string Description { get; set; } = null!;

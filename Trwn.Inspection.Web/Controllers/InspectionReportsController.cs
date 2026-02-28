@@ -54,57 +54,11 @@ namespace Trwn.Inspection.Web.Controllers
             return Ok(updatedReport);
         }
 
-        // POST: api/InspectionReports/5/Foto
-        [HttpPost("{id}/foto")]
-        public async Task<IActionResult> AddPhotoDocumentation(int id, PhotoDocumentation photoDocumentation )
-        {
-            var newFoto = await _inspectionReportsService.AddInspectionFoto(id, photoDocumentation);
-            if (newFoto == null)
-            {
-                return NotFound();
-            }
-
-            return CreatedAtAction(nameof(GetPhotoDocumentation), new { id, fotoId = newFoto.Code }, newFoto);
-        }
-
-        // GET: api/InspectionReports/5/Foto/5
-        [HttpGet("{id}/foto/{fotoCode}")]
-        public async Task<IActionResult> GetPhotoDocumentation(int id, int fotoCode)
-        {
-            var foto = await _inspectionReportsService.GetInspectionFoto(id, fotoCode);
-            if (foto == null)
-            {
-                return NotFound();
-            }
-            return Ok(foto);
-        }
-
-        // GET: api/InspectionReports/5/Foto
-        [HttpGet("{id}/foto")]
-        public async Task<IActionResult> GetAllPhotoDocumentation(int id)
-        {
-            var photos = await _inspectionReportsService.GetAllInspectionFoto(id);
-            if (photos == null)
-            {
-                return NotFound();
-            }
-            return Ok(photos);
-        }
-
         // DELETE: api/InspectionReports/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteInspectionReport(int id)
         {
             await _inspectionReportsService.DeleteInspectionReport(id);
-
-            return NoContent();
-        }
-
-        // DELETE: api/InspectionReports/5/Foto/5
-        [HttpDelete("{id}/foto/{fotoCode}")]
-        public async Task<IActionResult> DeletePhotoDocumentation(int id, int fotoCode)
-        {
-            await _inspectionReportsService.DeleteInspectionFoto(id, fotoCode);
 
             return NoContent();
         }

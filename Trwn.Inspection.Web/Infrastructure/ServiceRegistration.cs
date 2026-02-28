@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Trwn.Inspection.Core;
 using Trwn.Inspection.Data;
 using Trwn.Inspection.Infrastructure;
 using Trwn.Inspection.Infrastructure.Repositories;
@@ -10,6 +11,8 @@ namespace Trwn.Inspection.Web.Infrastructure
         public static void AddServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<IInspectionReportsService, InspectionReportsService>();
+            services.AddScoped<IPhotoService, PhotoService>();
+            services.AddScoped<IPhotoDocumentationRepository, PhotoDocumentationSqlRepository>();
             //services.AddSingleton<IInspectionReportRepository, SimpleInspectionReportRepository>();
             //services.AddSingleton<IInspectionReportRepository, InspectionReportMongoRepository>();
             services.AddScoped<IInspectionReportRepository, InspectionReportSqlRepository>();

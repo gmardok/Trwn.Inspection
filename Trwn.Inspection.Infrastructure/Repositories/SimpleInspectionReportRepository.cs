@@ -60,47 +60,5 @@ namespace Trwn.Inspection.Infrastructure.Repositories
             }
             return Task.FromResult(existingReport);
         }
-
-        public Task<PhotoDocumentation?> AddInspectionFoto(int id, PhotoDocumentation photoDocumentation)
-        {
-            var existingReport = InspectionReports.FirstOrDefault(r => r.Id == id);
-            if (existingReport != null)
-            {
-                existingReport.PhotoDocumentation.Add(photoDocumentation);
-
-                return Task.FromResult<PhotoDocumentation?>(photoDocumentation);
-            }
-            return Task.FromResult<PhotoDocumentation?>(null);
-        }
-
-        public Task DeleteInspectionFoto(int id, int fotoCode)
-        {
-            var existingReport = InspectionReports.FirstOrDefault(r => r.Id == id);
-            if (existingReport != null)
-            {
-                var foto = existingReport.PhotoDocumentation.FirstOrDefault(f => f.Code == fotoCode);
-                if (foto != null)
-                {
-                    existingReport.PhotoDocumentation.Remove(foto);
-                }
-            }
-            return Task.CompletedTask;
-        }
-
-        public Task<PhotoDocumentation?> GetInspectionFoto(int id, int fotoCode)
-        {
-            var existingReport = InspectionReports.FirstOrDefault(r => r.Id == id);
-            if (existingReport != null)
-            {
-                return Task.FromResult(existingReport.PhotoDocumentation.FirstOrDefault(f => f.Code == fotoCode));
-            }
-            return Task.FromResult<PhotoDocumentation?>(null);
-        }
-
-        public Task<List<PhotoDocumentation>> GetAllInspectionFoto(int id)
-        {
-            var existingReport = InspectionReports.FirstOrDefault(r => r.Id == id);
-            return Task.FromResult(existingReport?.PhotoDocumentation ?? new List<PhotoDocumentation>());
-        }
     }
 }

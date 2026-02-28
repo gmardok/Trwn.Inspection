@@ -7,8 +7,8 @@ namespace Trwn.Inspection.Infrastructure.Repositories
 {
     public class InspectionReportMongoRepository : IInspectionReportRepository
     {
-       
         private readonly IMongoCollection<InspectionReport> _collection;
+
         public InspectionReportMongoRepository(IOptions<AppSettings> options)
         {
             IMongoClient client;
@@ -43,39 +43,15 @@ namespace Trwn.Inspection.Infrastructure.Repositories
             }
         }
 
-        public async Task<PhotoDocumentation?> AddInspectionFoto(int id, PhotoDocumentation photoDocumentation)
-        {
-            await _collection.UpdateOneAsync(r => r.Id == id, Builders<InspectionReport>.Update.Push(r => r.PhotoDocumentation, photoDocumentation));
-            return photoDocumentation;
-        }
-
         public async Task<InspectionReport> AddInspectionReport(InspectionReport report)
         {
             await _collection.InsertOneAsync(report);
             return report;
         }
 
-        public async Task DeleteInspectionFoto(int id, int fotoCode)
-        {
-            await _collection.UpdateOneAsync(r => r.Id == id, 
-                Builders<InspectionReport>.Update.PullFilter(r => r.PhotoDocumentation, f => f.Code == fotoCode));
-        }
-
         public async Task DeleteInspectionReport(int id)
         {
             await _collection.DeleteOneAsync(r => r.Id == id);
-        }
-
-        public async Task<List<PhotoDocumentation>> GetAllInspectionFoto(int id)
-        {
-            var report = await _collection.Find(r => r.Id == id).FirstOrDefaultAsync();
-            return report?.PhotoDocumentation ?? new List<PhotoDocumentation>();
-        }
-
-        public async Task<PhotoDocumentation?> GetInspectionFoto(int id, int fotoCode)
-        {
-            var report = await _collection.Find(r => r.Id == id).FirstOrDefaultAsync();
-            return report?.PhotoDocumentation.FirstOrDefault(f => f.Code == fotoCode);
         }
 
         public async Task<InspectionReport?> GetInspectionReport(int id)
