@@ -1,6 +1,6 @@
 ﻿using Trwn.Inspection.Models;
 
-namespace Trwn.Inspection.Infrastructure
+namespace Trwn.Inspection.Infrastructure.Repositories
 {
     public class SimpleInspectionReportRepository : IInspectionReportRepository
     {
@@ -8,12 +8,11 @@ namespace Trwn.Inspection.Infrastructure
 
         public Task<InspectionReport> AddInspectionReport(InspectionReport report)
         {
-            report.Id = Guid.NewGuid().ToString();
             InspectionReports.Add(report);
             return Task.FromResult(report);
         }
 
-        public Task DeleteInspectionReport(string id)
+        public Task DeleteInspectionReport(int id)
         {
             var report = InspectionReports.FirstOrDefault(r => r.Id == id);
             if (report != null)
@@ -23,17 +22,17 @@ namespace Trwn.Inspection.Infrastructure
             return Task.CompletedTask;
         }
 
-        public Task<InspectionReport?> GetInspectionReport(string id)
+        public Task<InspectionReport?> GetInspectionReport(int id)
         {
             return Task.FromResult(InspectionReports.FirstOrDefault(r => r.Id == id));
         }
 
         public Task<List<InspectionReport>> GetInspectionReports()
         {
-            return Task.FromResult<List<InspectionReport>>(InspectionReports);
+            return Task.FromResult(InspectionReports);
         }
 
-        public Task<InspectionReport?> UpdateInspectionReport(string id, InspectionReport report)
+        public Task<InspectionReport?> UpdateInspectionReport(int id, InspectionReport report)
         {
             var existingReport = InspectionReports.FirstOrDefault(r => r.Id == id);
             if (existingReport != null)
@@ -62,7 +61,7 @@ namespace Trwn.Inspection.Infrastructure
             return Task.FromResult(existingReport);
         }
 
-        public Task<PhotoDocumentation?> AddInspectionFoto(string id, PhotoDocumentation photoDocumentation)
+        public Task<PhotoDocumentation?> AddInspectionFoto(int id, PhotoDocumentation photoDocumentation)
         {
             var existingReport = InspectionReports.FirstOrDefault(r => r.Id == id);
             if (existingReport != null)
@@ -74,7 +73,7 @@ namespace Trwn.Inspection.Infrastructure
             return Task.FromResult<PhotoDocumentation?>(null);
         }
 
-        public Task DeleteInspectionFoto(string id, int fotoCode)
+        public Task DeleteInspectionFoto(int id, int fotoCode)
         {
             var existingReport = InspectionReports.FirstOrDefault(r => r.Id == id);
             if (existingReport != null)
@@ -88,7 +87,7 @@ namespace Trwn.Inspection.Infrastructure
             return Task.CompletedTask;
         }
 
-        public Task<PhotoDocumentation?> GetInspectionFoto(string id, int fotoCode)
+        public Task<PhotoDocumentation?> GetInspectionFoto(int id, int fotoCode)
         {
             var existingReport = InspectionReports.FirstOrDefault(r => r.Id == id);
             if (existingReport != null)
@@ -98,7 +97,7 @@ namespace Trwn.Inspection.Infrastructure
             return Task.FromResult<PhotoDocumentation?>(null);
         }
 
-        public Task<List<PhotoDocumentation>> GetAllInspectionFoto(string id)
+        public Task<List<PhotoDocumentation>> GetAllInspectionFoto(int id)
         {
             var existingReport = InspectionReports.FirstOrDefault(r => r.Id == id);
             return Task.FromResult(existingReport?.PhotoDocumentation ?? new List<PhotoDocumentation>());

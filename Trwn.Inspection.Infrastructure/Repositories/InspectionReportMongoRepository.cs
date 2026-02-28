@@ -3,7 +3,7 @@ using MongoDB.Driver;
 using Trwn.Inspection.Configuration;
 using Trwn.Inspection.Models;
 
-namespace Trwn.Inspection.Infrastructure
+namespace Trwn.Inspection.Infrastructure.Repositories
 {
     public class InspectionReportMongoRepository : IInspectionReportRepository
     {
@@ -43,7 +43,7 @@ namespace Trwn.Inspection.Infrastructure
             }
         }
 
-        public async Task<PhotoDocumentation?> AddInspectionFoto(string id, PhotoDocumentation photoDocumentation)
+        public async Task<PhotoDocumentation?> AddInspectionFoto(int id, PhotoDocumentation photoDocumentation)
         {
             await _collection.UpdateOneAsync(r => r.Id == id, Builders<InspectionReport>.Update.Push(r => r.PhotoDocumentation, photoDocumentation));
             return photoDocumentation;
@@ -51,35 +51,34 @@ namespace Trwn.Inspection.Infrastructure
 
         public async Task<InspectionReport> AddInspectionReport(InspectionReport report)
         {
-            report.Id = report.Id ?? Guid.NewGuid().ToString();
             await _collection.InsertOneAsync(report);
             return report;
         }
 
-        public async Task DeleteInspectionFoto(string id, int fotoCode)
+        public async Task DeleteInspectionFoto(int id, int fotoCode)
         {
             await _collection.UpdateOneAsync(r => r.Id == id, 
                 Builders<InspectionReport>.Update.PullFilter(r => r.PhotoDocumentation, f => f.Code == fotoCode));
         }
 
-        public async Task DeleteInspectionReport(string id)
+        public async Task DeleteInspectionReport(int id)
         {
             await _collection.DeleteOneAsync(r => r.Id == id);
         }
 
-        public async Task<List<PhotoDocumentation>> GetAllInspectionFoto(string id)
+        public async Task<List<PhotoDocumentation>> GetAllInspectionFoto(int id)
         {
             var report = await _collection.Find(r => r.Id == id).FirstOrDefaultAsync();
             return report?.PhotoDocumentation ?? new List<PhotoDocumentation>();
         }
 
-        public async Task<PhotoDocumentation?> GetInspectionFoto(string id, int fotoCode)
+        public async Task<PhotoDocumentation?> GetInspectionFoto(int id, int fotoCode)
         {
             var report = await _collection.Find(r => r.Id == id).FirstOrDefaultAsync();
             return report?.PhotoDocumentation.FirstOrDefault(f => f.Code == fotoCode);
         }
 
-        public async Task<InspectionReport?> GetInspectionReport(string id)
+        public async Task<InspectionReport?> GetInspectionReport(int id)
         {
             return await _collection.Find(r => r.Id == id).FirstOrDefaultAsync();
         }
@@ -89,7 +88,7 @@ namespace Trwn.Inspection.Infrastructure
             return await _collection.Find(Builders<InspectionReport>.Filter.Empty).ToListAsync();
         }
 
-        public async Task<InspectionReport?> UpdateInspectionReport(string id, InspectionReport report)
+        public async Task<InspectionReport?> UpdateInspectionReport(int id, InspectionReport report)
         {
             var result = await _collection.FindOneAndUpdateAsync(r => r.Id == id, 
                 Builders<InspectionReport>.Update.Set(r => r, report),

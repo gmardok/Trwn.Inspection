@@ -23,7 +23,7 @@ namespace Trwn.Inspection.Web.Controllers
 
         // GET: api/InspectionReports/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetInspectionReport(string id)
+        public async Task<IActionResult> GetInspectionReport(int id)
         {
             var report = await _inspectionReportsService.GetInspectionReport(id);
             if (report == null)
@@ -37,14 +37,13 @@ namespace Trwn.Inspection.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> AddInspectionReport(InspectionReport report)
         {
-            report.Id = Guid.NewGuid().ToString();
             var newReport = await _inspectionReportsService.AddInspectionReport(report);
             return CreatedAtAction(nameof(GetInspectionReport), new { id = newReport.Id }, newReport);
         }
 
         // PUT: api/InspectionReports/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateInspectionReport(string id, InspectionReport report)
+        public async Task<IActionResult> UpdateInspectionReport(int id, InspectionReport report)
         {
             var updatedReport = _inspectionReportsService.UpdateInspectionReport(id, report);
             if (updatedReport == null)
@@ -57,7 +56,7 @@ namespace Trwn.Inspection.Web.Controllers
 
         // POST: api/InspectionReports/5/Foto
         [HttpPost("{id}/foto")]
-        public async Task<IActionResult> AddPhotoDocumentation(string id, PhotoDocumentation photoDocumentation )
+        public async Task<IActionResult> AddPhotoDocumentation(int id, PhotoDocumentation photoDocumentation )
         {
             var newFoto = await _inspectionReportsService.AddInspectionFoto(id, photoDocumentation);
             if (newFoto == null)
@@ -65,12 +64,12 @@ namespace Trwn.Inspection.Web.Controllers
                 return NotFound();
             }
 
-            return CreatedAtAction(nameof(GetPhotoDocumentation), new { id = id, fotoId = newFoto.Code }, newFoto);
+            return CreatedAtAction(nameof(GetPhotoDocumentation), new { id, fotoId = newFoto.Code }, newFoto);
         }
 
         // GET: api/InspectionReports/5/Foto/5
         [HttpGet("{id}/foto/{fotoCode}")]
-        public async Task<IActionResult> GetPhotoDocumentation(string id, int fotoCode)
+        public async Task<IActionResult> GetPhotoDocumentation(int id, int fotoCode)
         {
             var foto = await _inspectionReportsService.GetInspectionFoto(id, fotoCode);
             if (foto == null)
@@ -82,7 +81,7 @@ namespace Trwn.Inspection.Web.Controllers
 
         // GET: api/InspectionReports/5/Foto
         [HttpGet("{id}/foto")]
-        public async Task<IActionResult> GetAllPhotoDocumentation(string id)
+        public async Task<IActionResult> GetAllPhotoDocumentation(int id)
         {
             var photos = await _inspectionReportsService.GetAllInspectionFoto(id);
             if (photos == null)
@@ -94,7 +93,7 @@ namespace Trwn.Inspection.Web.Controllers
 
         // DELETE: api/InspectionReports/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteInspectionReport(string id)
+        public async Task<IActionResult> DeleteInspectionReport(int id)
         {
             await _inspectionReportsService.DeleteInspectionReport(id);
 
@@ -103,7 +102,7 @@ namespace Trwn.Inspection.Web.Controllers
 
         // DELETE: api/InspectionReports/5/Foto/5
         [HttpDelete("{id}/foto/{fotoCode}")]
-        public async Task<IActionResult> DeletePhotoDocumentation(string id, int fotoCode)
+        public async Task<IActionResult> DeletePhotoDocumentation(int id, int fotoCode)
         {
             await _inspectionReportsService.DeleteInspectionFoto(id, fotoCode);
 

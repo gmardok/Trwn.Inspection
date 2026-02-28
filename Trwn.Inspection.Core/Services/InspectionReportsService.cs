@@ -15,12 +15,12 @@ public class InspectionReportsService: IInspectionReportsService
         return _inspectionReportRepository.AddInspectionReport(report);
     }
 
-    public Task DeleteInspectionReport(string id)
+    public Task DeleteInspectionReport(int id)
     {
         return _inspectionReportRepository.DeleteInspectionReport(id);
     }
 
-    public Task<InspectionReport?> GetInspectionReport(string id)
+    public Task<InspectionReport?> GetInspectionReport(int id)
     {
         return _inspectionReportRepository.GetInspectionReport(id);
     }
@@ -30,27 +30,27 @@ public class InspectionReportsService: IInspectionReportsService
         return await _inspectionReportRepository.GetInspectionReports();
     }
 
-    public Task<InspectionReport?> UpdateInspectionReport(string id, InspectionReport report)
+    public Task<InspectionReport?> UpdateInspectionReport(int id, InspectionReport report)
     {
         return _inspectionReportRepository.UpdateInspectionReport(id, report);
     }
 
-    public Task<PhotoDocumentation?> AddInspectionFoto(string id, PhotoDocumentation photoDocumentation)
+    public Task<PhotoDocumentation?> AddInspectionFoto(int id, PhotoDocumentation photoDocumentation)
     {
         return _inspectionReportRepository.AddInspectionFoto(id, photoDocumentation);
     }
 
-    public Task<PhotoDocumentation?> GetInspectionFoto(string id, int fotoCode)
+    public Task<PhotoDocumentation?> GetInspectionFoto(int id, int fotoCode)
     {
         return _inspectionReportRepository.GetInspectionFoto(id, fotoCode);
     }
 
-    public Task DeleteInspectionFoto(string id, int fotoCode)
+    public Task DeleteInspectionFoto(int id, int fotoCode)
     {
         return _inspectionReportRepository.DeleteInspectionFoto(id, fotoCode);
     }
 
-    public Task<List<PhotoDocumentation>> GetAllInspectionFoto(string id)
+    public Task<List<PhotoDocumentation>> GetAllInspectionFoto(int id)
     {
         return _inspectionReportRepository.GetAllInspectionFoto(id);
     }

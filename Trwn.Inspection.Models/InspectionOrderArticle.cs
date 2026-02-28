@@ -2,6 +2,7 @@
 {
     public class InspectionOrderArticle
     {
+        public int Id { get; set; }
         public int LotNo { get; set; }
         public string ArticleNumber { get; set; } = null!;
         public int OrderQuantity { get; set; }
