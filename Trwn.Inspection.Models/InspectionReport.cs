@@ -32,5 +32,21 @@ namespace Trwn.Inspection.Models
         public int? AuthSessionId { get; set; }
 
         public AuthSession? AuthSession { get; set; }
+
+        public List<string> Remarks { get; set; } = new List<string>();
+        public int PiecesCuttingCount { get; set; }
+        public int PiecesSewingCount { get; set; }
+        public int PiecesInBagsCount { get; set; }
+        public bool? MeasuringEquipmentCheck { get; set; } = null;
+        public bool FalseProducts { get; set; }
+        public bool DprQuantityVerification { get; set; }
+        public bool ProductIdentification { get; set; }
+
+        public string Contract { get; set; } = null!;
+        public bool Specification { get; set; }
+        public bool ProductEvaluationForm { get; set; }
+        public string TestReport { get; set; } = null!;
+        public bool TrimCard { get; set; }
+        public string OtherRemarks { get; set; } = null!;
     }
 }
