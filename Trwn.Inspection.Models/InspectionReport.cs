@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace Trwn.Inspection.Models
@@ -27,5 +27,10 @@ namespace Trwn.Inspection.Models
         public string InspectorName { get; set; } = null!;
         public string FactoryRepresentative { get; set; } = null!;
         public List<PhotoDocumentation> PhotoDocumentation { get; set; } = new List<PhotoDocumentation>();
+
+        /// <summary>Auth session that owns this report; set server-side on create.</summary>
+        public int? AuthSessionId { get; set; }
+
+        public AuthSession? AuthSession { get; set; }
     }
 }

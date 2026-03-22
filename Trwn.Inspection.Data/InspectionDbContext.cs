@@ -13,6 +13,7 @@ public class InspectionDbContext : DbContext
     public DbSet<InspectionReport> InspectionReports => Set<InspectionReport>();
     public DbSet<InspectionOrderArticle> InspectionOrderArticles => Set<InspectionOrderArticle>();
     public DbSet<PhotoDocumentation> PhotoDocumentations => Set<PhotoDocumentation>();
+    public DbSet<AuthSession> AuthSessions => Set<AuthSession>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -46,6 +47,11 @@ public class InspectionDbContext : DbContext
                 .HasForeignKey("InspectionReportId")
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(e => e.AuthSession)
+                .WithMany()
+                .HasForeignKey(e => e.AuthSessionId)
+                .OnDelete(DeleteBehavior.SetNull);
         });
 
         modelBuilder.Entity<InspectionOrderArticle>(entity =>
@@ -59,6 +65,15 @@ public class InspectionDbContext : DbContext
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Description).IsRequired();
             entity.Property(e => e.PicturePath).IsRequired();
+        });
+
+        modelBuilder.Entity<AuthSession>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Email).IsRequired();
+            entity.Property(e => e.Code).IsRequired();
+            entity.HasIndex(e => e.Code).IsUnique();
+            entity.Property(e => e.AuthToken).HasMaxLength(4096);
         });
     }
 }

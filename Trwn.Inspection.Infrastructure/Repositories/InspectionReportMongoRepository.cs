@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using Trwn.Inspection.Configuration;
 using Trwn.Inspection.Models;
@@ -43,32 +43,40 @@ namespace Trwn.Inspection.Infrastructure.Repositories
             }
         }
 
-        public async Task<InspectionReport> AddInspectionReport(InspectionReport report)
+        public async Task<InspectionReport> AddInspectionReport(InspectionReport report, int authSessionId)
         {
+            report.AuthSessionId = authSessionId;
             await _collection.InsertOneAsync(report);
             return report;
         }
 
-        public async Task DeleteInspectionReport(int id)
+        public async Task DeleteInspectionReport(int id, int authSessionId)
         {
-            await _collection.DeleteOneAsync(r => r.Id == id);
+            await _collection.DeleteOneAsync(r => r.Id == id && r.AuthSessionId == authSessionId);
         }
 
-        public async Task<InspectionReport?> GetInspectionReport(int id)
+        public async Task<InspectionReport?> GetInspectionReport(int id, int authSessionId)
         {
-            return await _collection.Find(r => r.Id == id).FirstOrDefaultAsync();
+            return await _collection.Find(r => r.Id == id && r.AuthSessionId == authSessionId)
+                .FirstOrDefaultAsync();
         }
 
-        public async Task<List<InspectionReport>> GetInspectionReports()
+        public async Task<List<InspectionReport>> GetInspectionReports(int authSessionId)
         {
-            return await _collection.Find(Builders<InspectionReport>.Filter.Empty).ToListAsync();
+            return await _collection.Find(r => r.AuthSessionId == authSessionId).ToListAsync();
         }
 
-        public async Task<InspectionReport?> UpdateInspectionReport(int id, InspectionReport report)
+        public async Task<InspectionReport?> UpdateInspectionReport(int id, InspectionReport report, int authSessionId)
         {
-            var result = await _collection.FindOneAndUpdateAsync(r => r.Id == id, 
-                Builders<InspectionReport>.Update.Set(r => r, report),
-                new FindOneAndUpdateOptions<InspectionReport, InspectionReport?> { ReturnDocument = ReturnDocument.After});
+            report.Id = id;
+            report.AuthSessionId = authSessionId;
+            var result = await _collection.FindOneAndReplaceAsync(
+                r => r.Id == id && r.AuthSessionId == authSessionId,
+                report,
+                new FindOneAndReplaceOptions<InspectionReport, InspectionReport?>
+                {
+                    ReturnDocument = ReturnDocument.After,
+                });
             return result;
         }
     }

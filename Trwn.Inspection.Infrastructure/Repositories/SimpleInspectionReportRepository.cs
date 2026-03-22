@@ -1,4 +1,4 @@
-﻿using Trwn.Inspection.Models;
+using Trwn.Inspection.Models;
 
 namespace Trwn.Inspection.Infrastructure.Repositories
 {
@@ -6,35 +6,39 @@ namespace Trwn.Inspection.Infrastructure.Repositories
     {
         private static readonly List<InspectionReport> InspectionReports = new List<InspectionReport>();
 
-        public Task<InspectionReport> AddInspectionReport(InspectionReport report)
+        public Task<InspectionReport> AddInspectionReport(InspectionReport report, int authSessionId)
         {
+            report.AuthSessionId = authSessionId;
             InspectionReports.Add(report);
             return Task.FromResult(report);
         }
 
-        public Task DeleteInspectionReport(int id)
+        public Task DeleteInspectionReport(int id, int authSessionId)
         {
-            var report = InspectionReports.FirstOrDefault(r => r.Id == id);
+            var report = InspectionReports.FirstOrDefault(r => r.Id == id && r.AuthSessionId == authSessionId);
             if (report != null)
             {
                 InspectionReports.Remove(report);
             }
+
             return Task.CompletedTask;
         }
 
-        public Task<InspectionReport?> GetInspectionReport(int id)
+        public Task<InspectionReport?> GetInspectionReport(int id, int authSessionId)
         {
-            return Task.FromResult(InspectionReports.FirstOrDefault(r => r.Id == id));
+            return Task.FromResult(InspectionReports.FirstOrDefault(r =>
+                r.Id == id && r.AuthSessionId == authSessionId));
         }
 
-        public Task<List<InspectionReport>> GetInspectionReports()
+        public Task<List<InspectionReport>> GetInspectionReports(int authSessionId)
         {
-            return Task.FromResult(InspectionReports);
+            return Task.FromResult(InspectionReports.Where(r => r.AuthSessionId == authSessionId).ToList());
         }
 
-        public Task<InspectionReport?> UpdateInspectionReport(int id, InspectionReport report)
+        public Task<InspectionReport?> UpdateInspectionReport(int id, InspectionReport report, int authSessionId)
         {
-            var existingReport = InspectionReports.FirstOrDefault(r => r.Id == id);
+            var existingReport = InspectionReports.FirstOrDefault(r =>
+                r.Id == id && r.AuthSessionId == authSessionId);
             if (existingReport != null)
             {
                 existingReport.InspectionType = report.InspectionType;
@@ -58,6 +62,7 @@ namespace Trwn.Inspection.Infrastructure.Repositories
                 existingReport.FactoryRepresentative = report.FactoryRepresentative;
                 existingReport.PhotoDocumentation = report.PhotoDocumentation;
             }
+
             return Task.FromResult(existingReport);
         }
     }

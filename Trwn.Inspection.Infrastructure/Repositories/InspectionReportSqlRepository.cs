@@ -13,40 +13,45 @@ namespace Trwn.Inspection.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<List<InspectionReport>> GetInspectionReports()
+        public async Task<List<InspectionReport>> GetInspectionReports(int authSessionId)
         {
             return await _context.InspectionReports
                 .Include(r => r.InspectionOrder)
                 .Include(r => r.PhotoDocumentation)
+                .Where(r => r.AuthSessionId == authSessionId)
                 .OrderBy(r => r.Id)
                 .ToListAsync();
         }
 
-        public async Task<InspectionReport?> GetInspectionReport(int id)
+        public async Task<InspectionReport?> GetInspectionReport(int id, int authSessionId)
         {
             return await _context.InspectionReports
                 .Include(r => r.InspectionOrder)
                 .Include(r => r.PhotoDocumentation)
-                .FirstOrDefaultAsync(r => r.Id == id);
+                .FirstOrDefaultAsync(r => r.Id == id && r.AuthSessionId == authSessionId);
         }
 
-        public async Task<InspectionReport> AddInspectionReport(InspectionReport report)
+        public async Task<InspectionReport> AddInspectionReport(InspectionReport report, int authSessionId)
         {
             report.Id = 0;
+            report.AuthSessionId = authSessionId;
+            report.AuthSession = null;
             _context.InspectionReports.Add(report);
             await _context.SaveChangesAsync();
             return report;
         }
 
-        public async Task<InspectionReport?> UpdateInspectionReport(int id, InspectionReport report)
+        public async Task<InspectionReport?> UpdateInspectionReport(int id, InspectionReport report, int authSessionId)
         {
             var existing = await _context.InspectionReports
                 .Include(r => r.InspectionOrder)
                 .Include(r => r.PhotoDocumentation)
-                .FirstOrDefaultAsync(r => r.Id == id);
+                .FirstOrDefaultAsync(r => r.Id == id && r.AuthSessionId == authSessionId);
 
             if (existing == null)
+            {
                 return null;
+            }
 
             existing.Name = report.Name;
             existing.InspectionType = report.InspectionType;
@@ -69,7 +74,7 @@ namespace Trwn.Inspection.Infrastructure.Repositories
             existing.FactoryRepresentative = report.FactoryRepresentative;
 
             existing.InspectionOrder.Clear();
-            foreach (var item in existing.InspectionOrder)
+            foreach (var item in report.InspectionOrder)
             {
                 existing.InspectionOrder.Add(new InspectionOrderArticle
                 {
@@ -80,7 +85,7 @@ namespace Trwn.Inspection.Infrastructure.Repositories
                     ShipmentQuantityCartons = item.ShipmentQuantityCartons,
                     UnitsPacked = item.UnitsPacked,
                     UnitsFinishedNotPacked = item.UnitsFinishedNotPacked,
-                    UnitsNotFinished = item.UnitsNotFinished
+                    UnitsNotFinished = item.UnitsNotFinished,
                 });
             }
 
@@ -94,7 +99,7 @@ namespace Trwn.Inspection.Infrastructure.Repositories
                     Code = item.Code,
                     Description = item.Description,
                     PicturePath = item.PicturePath,
-                    Count = item.Count
+                    Count = item.Count,
                 });
             }
 
@@ -102,9 +107,10 @@ namespace Trwn.Inspection.Infrastructure.Repositories
             return existing;
         }
 
-        public async Task DeleteInspectionReport(int id)
+        public async Task DeleteInspectionReport(int id, int authSessionId)
         {
-            var report = await _context.InspectionReports.FindAsync(id);
+            var report = await _context.InspectionReports
+                .FirstOrDefaultAsync(r => r.Id == id && r.AuthSessionId == authSessionId);
             if (report != null)
             {
                 _context.InspectionReports.Remove(report);

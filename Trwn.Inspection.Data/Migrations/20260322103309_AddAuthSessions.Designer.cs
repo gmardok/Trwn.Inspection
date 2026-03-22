@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Trwn.Inspection.Data;
 
@@ -10,9 +11,11 @@ using Trwn.Inspection.Data;
 namespace Trwn.Inspection.Data.Migrations
 {
     [DbContext(typeof(InspectionDbContext))]
-    partial class InspectionDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260322103309_AddAuthSessions")]
+    partial class AddAuthSessions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.3");
@@ -103,9 +106,6 @@ namespace Trwn.Inspection.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("AuthSessionId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("Client")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -175,8 +175,6 @@ namespace Trwn.Inspection.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AuthSessionId");
-
                     b.HasIndex("ReportNo")
                         .IsUnique();
 
@@ -223,16 +221,6 @@ namespace Trwn.Inspection.Data.Migrations
                         .HasForeignKey("InspectionReportId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Trwn.Inspection.Models.InspectionReport", b =>
-                {
-                    b.HasOne("Trwn.Inspection.Models.AuthSession", "AuthSession")
-                        .WithMany()
-                        .HasForeignKey("AuthSessionId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.Navigation("AuthSession");
                 });
 
             modelBuilder.Entity("Trwn.Inspection.Models.PhotoDocumentation", b =>
