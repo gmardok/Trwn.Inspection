@@ -398,3 +398,5 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+/Trwn.Inspection.Web/Photos
+/Trwn.Inspection.Web/img

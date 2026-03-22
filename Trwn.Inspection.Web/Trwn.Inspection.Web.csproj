@@ -23,4 +23,8 @@
     <ProjectReference Include="..\Trwn.Inspection.Models\Trwn.Inspection.Models.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="img\" />
+  </ItemGroup>
+
 </Project>
