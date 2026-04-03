@@ -1,3 +1,7 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Trwn.Inspection.Models;
 
 namespace Trwn.Inspection.Infrastructure.Repositories
@@ -6,16 +10,17 @@ namespace Trwn.Inspection.Infrastructure.Repositories
     {
         private static readonly List<InspectionReport> InspectionReports = new List<InspectionReport>();
 
-        public Task<InspectionReport> AddInspectionReport(InspectionReport report, int authSessionId)
+        public Task<InspectionReport> AddInspectionReport(InspectionReport report, int userId)
         {
-            report.AuthSessionId = authSessionId;
+            report.UserId = userId;
+            report.CreatedAtUtc = DateTime.UtcNow;
             InspectionReports.Add(report);
             return Task.FromResult(report);
         }
 
-        public Task DeleteInspectionReport(int id, int authSessionId)
+        public Task DeleteInspectionReport(int id)
         {
-            var report = InspectionReports.FirstOrDefault(r => r.Id == id && r.AuthSessionId == authSessionId);
+            var report = InspectionReports.FirstOrDefault(r => r.Id == id);
             if (report != null)
             {
                 InspectionReports.Remove(report);
@@ -24,21 +29,19 @@ namespace Trwn.Inspection.Infrastructure.Repositories
             return Task.CompletedTask;
         }
 
-        public Task<InspectionReport?> GetInspectionReport(int id, int authSessionId)
+        public Task<InspectionReport?> GetInspectionReport(int id)
         {
-            return Task.FromResult(InspectionReports.FirstOrDefault(r =>
-                r.Id == id && r.AuthSessionId == authSessionId));
+            return Task.FromResult(InspectionReports.FirstOrDefault(r => r.Id == id));
         }
 
-        public Task<List<InspectionReport>> GetInspectionReports(int authSessionId)
+        public Task<List<InspectionReport>> GetInspectionReports()
         {
-            return Task.FromResult(InspectionReports.Where(r => r.AuthSessionId == authSessionId).ToList());
+            return Task.FromResult(InspectionReports.ToList());
         }
 
-        public Task<InspectionReport?> UpdateInspectionReport(int id, InspectionReport report, int authSessionId)
+        public Task<InspectionReport?> UpdateInspectionReport(int id, InspectionReport report, int userId)
         {
-            var existingReport = InspectionReports.FirstOrDefault(r =>
-                r.Id == id && r.AuthSessionId == authSessionId);
+            var existingReport = InspectionReports.FirstOrDefault(r => r.Id == id);
             if (existingReport != null)
             {
                 existingReport.InspectionType = report.InspectionType;
@@ -61,6 +64,8 @@ namespace Trwn.Inspection.Infrastructure.Repositories
                 existingReport.InspectorName = report.InspectorName;
                 existingReport.FactoryRepresentative = report.FactoryRepresentative;
                 existingReport.PhotoDocumentation = report.PhotoDocumentation;
+                existingReport.UpdatedByUserId = userId;
+                existingReport.UpdatedAtUtc = DateTime.UtcNow;
             }
 
             return Task.FromResult(existingReport);

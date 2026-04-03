@@ -17,7 +17,7 @@ public sealed class JwtTokenService : IJwtTokenService
         _settings = options.Value;
     }
 
-    public JwtTokenIssueResult CreateToken(string email, int sessionId)
+    public JwtTokenIssueResult CreateToken(string email, int sessionId, int userId)
     {
         var key = GetSigningKey();
         var expires = DateTime.UtcNow.AddHours(_settings.JwtExpirationHours);
@@ -26,6 +26,7 @@ public sealed class JwtTokenService : IJwtTokenService
         {
             new Claim(ClaimTypes.Email, email),
             new Claim(ClaimTypes.NameIdentifier, sessionId.ToString(CultureInfo.InvariantCulture)),
+            new Claim("uid", userId.ToString(CultureInfo.InvariantCulture)),
         };
 
         var jwt = new JwtSecurityToken(
@@ -70,6 +71,13 @@ public sealed class JwtTokenService : IJwtTokenService
         sessionId = 0;
         var id = principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         return id != null && int.TryParse(id, CultureInfo.InvariantCulture, out sessionId);
+    }
+
+    public bool TryGetUserId(ClaimsPrincipal principal, out int userId)
+    {
+        userId = 0;
+        var id = principal.FindFirst("uid")?.Value;
+        return id != null && int.TryParse(id, CultureInfo.InvariantCulture, out userId);
     }
 
     private SymmetricSecurityKey GetSigningKey()

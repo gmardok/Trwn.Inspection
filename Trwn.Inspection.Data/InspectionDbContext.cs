@@ -14,9 +14,23 @@ public class InspectionDbContext : DbContext
     public DbSet<InspectionOrderArticle> InspectionOrderArticles => Set<InspectionOrderArticle>();
     public DbSet<PhotoDocumentation> PhotoDocumentations => Set<PhotoDocumentation>();
     public DbSet<AuthSession> AuthSessions => Set<AuthSession>();
+    public DbSet<User> Users => Set<User>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Email).IsRequired();
+            entity.HasIndex(e => e.Email).IsUnique();
+            entity.Property(e => e.DisplayName).HasMaxLength(200);
+
+            entity.HasMany(e => e.AuthSessions)
+                .WithOne(s => s.User)
+                .HasForeignKey(s => s.UserId)
+                .OnDelete(DeleteBehavior.SetNull);
+        });
+
         modelBuilder.Entity<InspectionReport>(entity =>
         {
             entity.HasKey(e => e.Id);
@@ -51,6 +65,16 @@ public class InspectionDbContext : DbContext
             entity.HasOne(e => e.AuthSession)
                 .WithMany()
                 .HasForeignKey(e => e.AuthSessionId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            entity.HasOne(e => e.User)
+                .WithMany(u => u.InspectionReports)
+                .HasForeignKey(e => e.UserId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            entity.HasOne(e => e.UpdatedByUser)
+                .WithMany()
+                .HasForeignKey(e => e.UpdatedByUserId)
                 .OnDelete(DeleteBehavior.SetNull);
         });
 

@@ -20,6 +20,7 @@ namespace Trwn.Inspection.Web.Infrastructure
         {
             services.AddHttpContextAccessor();
             services.AddScoped<IAuthSessionContext, HttpAuthSessionContext>();
+            services.AddScoped<IUserContext, HttpUserContext>();
 
             services.Configure<AuthSettings>(configuration.GetSection("Auth"));
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -33,6 +34,9 @@ namespace Trwn.Inspection.Web.Infrastructure
             services.AddScoped<IJwtTokenService, JwtTokenService>();
             services.AddScoped<ILoginCodeEmailSender, SmtpLoginCodeEmailSender>();
             services.AddScoped<IAuthService, AuthService>();
+
+            services.AddScoped<IUserRepository, UserSqlRepository>();
+            services.AddScoped<IUsersService, UsersService>();
 
             services.AddScoped<IInspectionReportsService, InspectionReportsService>();
             services.AddScoped<IInspectionReportGenerator, InspectionReportGenerator>();

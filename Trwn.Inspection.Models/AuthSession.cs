@@ -22,5 +22,8 @@ namespace Trwn.Inspection.Models
         public DateTime? TokenExpiresAtUtc { get; set; }
 
         public bool IsLoggedOut { get; set; }
+
+        public int? UserId { get; set; }
+        public User? User { get; set; }
     }
 }

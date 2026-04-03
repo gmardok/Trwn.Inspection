@@ -14,19 +14,22 @@ public sealed class AuthService : IAuthService
     private readonly IEmailDomainPolicy _emailDomainPolicy;
     private readonly IJwtTokenService _jwtTokenService;
     private readonly ILoginCodeEmailSender _emailSender;
+    private readonly IUserRepository _userRepository;
 
     public AuthService(
         InspectionDbContext db,
         IOptions<AuthSettings> authOptions,
         IEmailDomainPolicy emailDomainPolicy,
         IJwtTokenService jwtTokenService,
-        ILoginCodeEmailSender emailSender)
+        ILoginCodeEmailSender emailSender,
+        IUserRepository userRepository)
     {
         _db = db;
         _settings = authOptions.Value;
         _emailDomainPolicy = emailDomainPolicy;
         _jwtTokenService = jwtTokenService;
         _emailSender = emailSender;
+        _userRepository = userRepository;
     }
 
     public async Task<AuthSendCodeResult> SendLoginCodeAsync(string? email, CancellationToken cancellationToken)
@@ -47,6 +50,8 @@ public sealed class AuthService : IAuthService
             return new AuthSendCodeResult(false, 403, "Email domain is not allowed.");
         }
 
+        var user = await _userRepository.GetOrCreateAsync(email, cancellationToken).ConfigureAwait(false);
+
         const int maxAttempts = 5;
         for (var attempt = 0; attempt < maxAttempts; attempt++)
         {
@@ -59,6 +64,7 @@ public sealed class AuthService : IAuthService
                 AuthToken = null,
                 TokenExpiresAtUtc = null,
                 IsLoggedOut = false,
+                UserId = user.Id,
             };
 
             _db.AuthSessions.Add(session);
@@ -104,7 +110,7 @@ public sealed class AuthService : IAuthService
             return new AuthTokenResult(false, 400, "Code has expired.", null, null);
         }
 
-        var issued = _jwtTokenService.CreateToken(session.Email, session.Id);
+        var issued = _jwtTokenService.CreateToken(session.Email, session.Id, session.UserId ?? 0);
         session.AuthToken = issued.Token;
         session.TokenExpiresAtUtc = issued.ExpiresAtUtc;
         session.IsLoggedOut = false;
@@ -116,22 +122,26 @@ public sealed class AuthService : IAuthService
 
     public async Task<AuthTokenResult> ExchangeCodeForTokenDebugAsync(string? code, CancellationToken cancellationToken)
     {
+        const string debugEmail = "debug@email.hh";
+        var debugUser = await _userRepository.GetOrCreateAsync(debugEmail, cancellationToken).ConfigureAwait(false);
+
         var session = new AuthSession
         {
-            Email = "debug@email.hh",
+            Email = debugEmail,
             Code = code ?? "123",
             CreatedAtUtc = DateTime.UtcNow,
             AuthToken = null,
             TokenExpiresAtUtc = null,
             IsLoggedOut = false,
+            UserId = debugUser.Id,
         };
 
         _db.AuthSessions.Add(session);
+        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
-        var issued = _jwtTokenService.CreateToken(session.Email, session.Id);
+        var issued = _jwtTokenService.CreateToken(session.Email, session.Id, debugUser.Id);
         session.AuthToken = issued.Token;
         session.TokenExpiresAtUtc = issued.ExpiresAtUtc;
-        session.IsLoggedOut = false;
 
         await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
@@ -160,7 +170,7 @@ public sealed class AuthService : IAuthService
             return new AuthTokenResult(false, 401, "Token is invalid or revoked.", null, null);
         }
 
-        var issued = _jwtTokenService.CreateToken(session.Email, session.Id);
+        var issued = _jwtTokenService.CreateToken(session.Email, session.Id, session.UserId ?? 0);
         session.AuthToken = issued.Token;
         session.TokenExpiresAtUtc = issued.ExpiresAtUtc;
 

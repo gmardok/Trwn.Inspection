@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Trwn.Inspection.Data;
 
@@ -10,9 +11,11 @@ using Trwn.Inspection.Data;
 namespace Trwn.Inspection.Data.Migrations
 {
     [DbContext(typeof(InspectionDbContext))]
-    partial class InspectionDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260403143259_AddReportAuditFields")]
+    partial class AddReportAuditFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.3");

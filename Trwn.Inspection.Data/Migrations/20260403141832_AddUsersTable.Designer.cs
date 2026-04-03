@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Trwn.Inspection.Data;
 
@@ -10,9 +11,11 @@ using Trwn.Inspection.Data;
 namespace Trwn.Inspection.Data.Migrations
 {
     [DbContext(typeof(InspectionDbContext))]
-    partial class InspectionDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260403141832_AddUsersTable")]
+    partial class AddUsersTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.3");
@@ -123,9 +126,6 @@ namespace Trwn.Inspection.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime?>("CreatedAtUtc")
-                        .HasColumnType("TEXT");
-
                     b.Property<bool>("DprQuantityVerification")
                         .HasColumnType("INTEGER");
 
@@ -227,12 +227,6 @@ namespace Trwn.Inspection.Data.Migrations
                     b.Property<bool>("TrimCard")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime?>("UpdatedAtUtc")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int?>("UpdatedByUserId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int?>("UserId")
                         .HasColumnType("INTEGER");
 
@@ -242,8 +236,6 @@ namespace Trwn.Inspection.Data.Migrations
 
                     b.HasIndex("ReportNo")
                         .IsUnique();
-
-                    b.HasIndex("UpdatedByUserId");
 
                     b.HasIndex("UserId");
 
@@ -334,19 +326,12 @@ namespace Trwn.Inspection.Data.Migrations
                         .HasForeignKey("AuthSessionId")
                         .OnDelete(DeleteBehavior.SetNull);
 
-                    b.HasOne("Trwn.Inspection.Models.User", "UpdatedByUser")
-                        .WithMany()
-                        .HasForeignKey("UpdatedByUserId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
                     b.HasOne("Trwn.Inspection.Models.User", "User")
                         .WithMany("InspectionReports")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("AuthSession");
-
-                    b.Navigation("UpdatedByUser");
 
                     b.Navigation("User");
                 });

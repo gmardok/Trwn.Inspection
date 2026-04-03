@@ -4,14 +4,14 @@ namespace Trwn.Inspection.Infrastructure
 {
     public interface IInspectionReportRepository
     {
-        Task<List<InspectionReport>> GetInspectionReports(int authSessionId);
+        Task<List<InspectionReport>> GetInspectionReports();
 
-        Task<InspectionReport?> GetInspectionReport(int id, int authSessionId);
+        Task<InspectionReport?> GetInspectionReport(int id);
 
-        Task<InspectionReport> AddInspectionReport(InspectionReport report, int authSessionId);
+        Task<InspectionReport> AddInspectionReport(InspectionReport report, int userId);
 
-        Task<InspectionReport?> UpdateInspectionReport(int id, InspectionReport report, int authSessionId);
+        Task<InspectionReport?> UpdateInspectionReport(int id, InspectionReport report, int userId);
 
-        Task DeleteInspectionReport(int id, int authSessionId);
+        Task DeleteInspectionReport(int id);
     }
 }

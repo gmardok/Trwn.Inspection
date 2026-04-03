@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using Trwn.Inspection.Configuration;
@@ -43,35 +46,36 @@ namespace Trwn.Inspection.Infrastructure.Repositories
             }
         }
 
-        public async Task<InspectionReport> AddInspectionReport(InspectionReport report, int authSessionId)
+        public async Task<InspectionReport> AddInspectionReport(InspectionReport report, int userId)
         {
-            report.AuthSessionId = authSessionId;
+            report.UserId = userId;
+            report.CreatedAtUtc = DateTime.UtcNow;
             await _collection.InsertOneAsync(report);
             return report;
         }
 
-        public async Task DeleteInspectionReport(int id, int authSessionId)
+        public async Task DeleteInspectionReport(int id)
         {
-            await _collection.DeleteOneAsync(r => r.Id == id && r.AuthSessionId == authSessionId);
+            await _collection.DeleteOneAsync(r => r.Id == id);
         }
 
-        public async Task<InspectionReport?> GetInspectionReport(int id, int authSessionId)
+        public async Task<InspectionReport?> GetInspectionReport(int id)
         {
-            return await _collection.Find(r => r.Id == id && r.AuthSessionId == authSessionId)
-                .FirstOrDefaultAsync();
+            return await _collection.Find(r => r.Id == id).FirstOrDefaultAsync();
         }
 
-        public async Task<List<InspectionReport>> GetInspectionReports(int authSessionId)
+        public async Task<List<InspectionReport>> GetInspectionReports()
         {
-            return await _collection.Find(r => r.AuthSessionId == authSessionId).ToListAsync();
+            return await _collection.Find(_ => true).ToListAsync();
         }
 
-        public async Task<InspectionReport?> UpdateInspectionReport(int id, InspectionReport report, int authSessionId)
+        public async Task<InspectionReport?> UpdateInspectionReport(int id, InspectionReport report, int userId)
         {
             report.Id = id;
-            report.AuthSessionId = authSessionId;
+            report.UpdatedByUserId = userId;
+            report.UpdatedAtUtc = DateTime.UtcNow;
             var result = await _collection.FindOneAndReplaceAsync(
-                r => r.Id == id && r.AuthSessionId == authSessionId,
+                r => r.Id == id,
                 report,
                 new FindOneAndReplaceOptions<InspectionReport, InspectionReport?>
                 {

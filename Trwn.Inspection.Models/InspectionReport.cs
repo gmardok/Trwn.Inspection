@@ -33,6 +33,19 @@ namespace Trwn.Inspection.Models
 
         public AuthSession? AuthSession { get; set; }
 
+        /// <summary>User that created this report; set server-side on create.</summary>
+        public int? UserId { get; set; }
+
+        public User? User { get; set; }
+
+        public DateTime? CreatedAtUtc { get; set; }
+
+        public int? UpdatedByUserId { get; set; }
+
+        public User? UpdatedByUser { get; set; }
+
+        public DateTime? UpdatedAtUtc { get; set; }
+
         public List<string> Remarks { get; set; } = new List<string>();
         public int PiecesCuttingCount { get; set; }
         public int PiecesSewingCount { get; set; }

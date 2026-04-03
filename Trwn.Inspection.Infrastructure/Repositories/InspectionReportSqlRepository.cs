@@ -1,10 +1,13 @@
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Trwn.Inspection.Data;
 using Trwn.Inspection.Models;
 
 namespace Trwn.Inspection.Infrastructure.Repositories
 {
-    public class InspectionReportSqlRepository : IInspectionReportRepository
+    public sealed class InspectionReportSqlRepository : IInspectionReportRepository
     {
         private readonly InspectionDbContext _context;
 
@@ -13,40 +16,47 @@ namespace Trwn.Inspection.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<List<InspectionReport>> GetInspectionReports(int authSessionId)
+        public async Task<List<InspectionReport>> GetInspectionReports()
         {
             return await _context.InspectionReports
                 .Include(r => r.InspectionOrder)
                 .Include(r => r.PhotoDocumentation)
-                //.Where(r => r.AuthSessionId == authSessionId)
                 .OrderBy(r => r.Id)
-                .ToListAsync();
+                .ToListAsync()
+                .ConfigureAwait(false);
         }
 
-        public async Task<InspectionReport?> GetInspectionReport(int id, int authSessionId)
+        public async Task<InspectionReport?> GetInspectionReport(int id)
         {
             return await _context.InspectionReports
                 .Include(r => r.InspectionOrder)
                 .Include(r => r.PhotoDocumentation)
-                .FirstOrDefaultAsync(r => r.Id == id);// && r.AuthSessionId == authSessionId);
+                .FirstOrDefaultAsync(r => r.Id == id)
+                .ConfigureAwait(false);
         }
 
-        public async Task<InspectionReport> AddInspectionReport(InspectionReport report, int authSessionId)
+        public async Task<InspectionReport> AddInspectionReport(InspectionReport report, int userId)
         {
             report.Id = 0;
-            report.AuthSessionId = authSessionId;
+            report.UserId = userId;
+            report.CreatedAtUtc = DateTime.UtcNow;
+            report.UpdatedByUserId = null;
+            report.UpdatedAtUtc = null;
+            report.User = null;
+            report.UpdatedByUser = null;
             report.AuthSession = null;
             _context.InspectionReports.Add(report);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync().ConfigureAwait(false);
             return report;
         }
 
-        public async Task<InspectionReport?> UpdateInspectionReport(int id, InspectionReport report, int authSessionId)
+        public async Task<InspectionReport?> UpdateInspectionReport(int id, InspectionReport report, int userId)
         {
             var existing = await _context.InspectionReports
                 .Include(r => r.InspectionOrder)
                 .Include(r => r.PhotoDocumentation)
-                .FirstOrDefaultAsync(r => r.Id == id);// && r.AuthSessionId == authSessionId);
+                .FirstOrDefaultAsync(r => r.Id == id)
+                .ConfigureAwait(false);
 
             if (existing == null)
             {
@@ -72,6 +82,8 @@ namespace Trwn.Inspection.Infrastructure.Repositories
             existing.InspectionResult = report.InspectionResult;
             existing.InspectorName = report.InspectorName;
             existing.FactoryRepresentative = report.FactoryRepresentative;
+            existing.UpdatedByUserId = userId;
+            existing.UpdatedAtUtc = DateTime.UtcNow;
 
             existing.InspectionOrder.Clear();
             foreach (var item in report.InspectionOrder)
@@ -103,18 +115,19 @@ namespace Trwn.Inspection.Infrastructure.Repositories
                 });
             }
 
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync().ConfigureAwait(false);
             return existing;
         }
 
-        public async Task DeleteInspectionReport(int id, int authSessionId)
+        public async Task DeleteInspectionReport(int id)
         {
             var report = await _context.InspectionReports
-                .FirstOrDefaultAsync(r => r.Id == id);// && r.AuthSessionId == authSessionId);
+                .FirstOrDefaultAsync(r => r.Id == id)
+                .ConfigureAwait(false);
             if (report != null)
             {
                 _context.InspectionReports.Remove(report);
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync().ConfigureAwait(false);
             }
         }
     }
