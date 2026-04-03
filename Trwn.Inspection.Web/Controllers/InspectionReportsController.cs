@@ -1,8 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using Trwn.Inspection.Configuration;
 using Trwn.Inspection.Core.Interfaces;
 using Trwn.Inspection.Models;
 
@@ -15,19 +12,13 @@ namespace Trwn.Inspection.Web.Controllers
     {
         private readonly IInspectionReportsService _inspectionReportsService;
         private readonly IInspectionReportGenerator _reportGenerator;
-        private readonly IWebHostEnvironment _env;
-        private readonly AppSettings _appSettings;
 
         public InspectionReportsController(
             IInspectionReportsService inspectionReportsService,
-            IInspectionReportGenerator reportGenerator,
-            IWebHostEnvironment env,
-            IOptions<AppSettings> appSettings)
+            IInspectionReportGenerator reportGenerator)
         {
             _inspectionReportsService = inspectionReportsService;
             _reportGenerator = reportGenerator;
-            _env = env;
-            _appSettings = appSettings.Value;
         }
         // GET: api/InspectionReports
         [HttpGet]
@@ -37,19 +28,18 @@ namespace Trwn.Inspection.Web.Controllers
             return Ok(result);
         }
 
-        // GET: api/InspectionReports/5/pdf
-        [HttpGet("{id}/pdf")]
-        public async Task<IActionResult> GetInspectionReportPdf(int id)
+        // GET: api/InspectionReports/5/docx
+        [HttpGet("{id}/docx")]
+        public async Task<IActionResult> GetInspectionReportDocx(int id)
         {
             var report = await _inspectionReportsService.GetInspectionReport(id);
             if (report == null)
             {
                 return NotFound();
             }
-            var photoPath = Path.Combine(_env.ContentRootPath, _appSettings.PhotoStoragePath ?? "Photos");
-            var pdfBytes = _reportGenerator.GeneratePdfReport(report, photoPath);
-            var fileName = $"InspectionReport_{report.ReportNo?.Replace("/", "-") ?? id.ToString()}.pdf";
-            return File(pdfBytes, "application/pdf", fileName);
+            var docxBytes = _reportGenerator.GenerateDocxReport(report);
+            var fileName = $"InspectionReport_{report.ReportNo?.Replace("/", "-") ?? id.ToString()}.docx";
+            return File(docxBytes, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", fileName);
         }
 
         // GET: api/InspectionReports/5
