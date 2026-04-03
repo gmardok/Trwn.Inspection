@@ -18,7 +18,7 @@ namespace Trwn.Inspection.Infrastructure.Repositories
             return await _context.InspectionReports
                 .Include(r => r.InspectionOrder)
                 .Include(r => r.PhotoDocumentation)
-                .Where(r => r.AuthSessionId == authSessionId)
+                //.Where(r => r.AuthSessionId == authSessionId)
                 .OrderBy(r => r.Id)
                 .ToListAsync();
         }
@@ -28,7 +28,7 @@ namespace Trwn.Inspection.Infrastructure.Repositories
             return await _context.InspectionReports
                 .Include(r => r.InspectionOrder)
                 .Include(r => r.PhotoDocumentation)
-                .FirstOrDefaultAsync(r => r.Id == id && r.AuthSessionId == authSessionId);
+                .FirstOrDefaultAsync(r => r.Id == id);// && r.AuthSessionId == authSessionId);
         }
 
         public async Task<InspectionReport> AddInspectionReport(InspectionReport report, int authSessionId)
@@ -46,7 +46,7 @@ namespace Trwn.Inspection.Infrastructure.Repositories
             var existing = await _context.InspectionReports
                 .Include(r => r.InspectionOrder)
                 .Include(r => r.PhotoDocumentation)
-                .FirstOrDefaultAsync(r => r.Id == id && r.AuthSessionId == authSessionId);
+                .FirstOrDefaultAsync(r => r.Id == id);// && r.AuthSessionId == authSessionId);
 
             if (existing == null)
             {
@@ -110,7 +110,7 @@ namespace Trwn.Inspection.Infrastructure.Repositories
         public async Task DeleteInspectionReport(int id, int authSessionId)
         {
             var report = await _context.InspectionReports
-                .FirstOrDefaultAsync(r => r.Id == id && r.AuthSessionId == authSessionId);
+                .FirstOrDefaultAsync(r => r.Id == id);// && r.AuthSessionId == authSessionId);
             if (report != null)
             {
                 _context.InspectionReports.Remove(report);

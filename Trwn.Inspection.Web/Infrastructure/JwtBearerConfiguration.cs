@@ -47,7 +47,9 @@ public static class JwtBearerConfiguration
                 await using var scope = context.HttpContext.RequestServices.CreateAsyncScope();
                 var db = scope.ServiceProvider.GetRequiredService<InspectionDbContext>();
                 var session = await db.AuthSessions.AsNoTracking()
-                    .FirstOrDefaultAsync(s => s.Id == sessionId, context.HttpContext.RequestAborted)
+                    .FirstOrDefaultAsync(s => s.Id == sessionId 
+                    || (!string.IsNullOrEmpty(s.AuthToken)) && s.AuthToken.Equals(rawToken),
+                    context.HttpContext.RequestAborted)
                     .ConfigureAwait(false);
 
                 if (session == null || session.IsLoggedOut || session.AuthToken != rawToken)

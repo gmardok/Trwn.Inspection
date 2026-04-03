@@ -80,6 +80,9 @@ public sealed class AuthService : IAuthService
 
     public async Task<AuthTokenResult> ExchangeCodeForTokenAsync(string? code, CancellationToken cancellationToken)
     {
+#if DEBUG
+        return await ExchangeCodeForTokenDebugAsync(code, cancellationToken);
+#endif
         if (string.IsNullOrWhiteSpace(code))
         {
             return new AuthTokenResult(false, 400, "Code is required.", null, null);
@@ -100,6 +103,30 @@ public sealed class AuthService : IAuthService
         {
             return new AuthTokenResult(false, 400, "Code has expired.", null, null);
         }
+
+        var issued = _jwtTokenService.CreateToken(session.Email, session.Id);
+        session.AuthToken = issued.Token;
+        session.TokenExpiresAtUtc = issued.ExpiresAtUtc;
+        session.IsLoggedOut = false;
+
+        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+
+        return new AuthTokenResult(true, 200, null, issued.Token, issued.ExpiresAtUtc);
+    }
+
+    public async Task<AuthTokenResult> ExchangeCodeForTokenDebugAsync(string? code, CancellationToken cancellationToken)
+    {
+        var session = new AuthSession
+        {
+            Email = "debug@email.hh",
+            Code = code ?? "123",
+            CreatedAtUtc = DateTime.UtcNow,
+            AuthToken = null,
+            TokenExpiresAtUtc = null,
+            IsLoggedOut = false,
+        };
+
+        _db.AuthSessions.Add(session);
 
         var issued = _jwtTokenService.CreateToken(session.Email, session.Id);
         session.AuthToken = issued.Token;
