@@ -137,18 +137,23 @@ public sealed class AuthService : IAuthService
         const string debugEmail = "debug@email.hh";
         var debugUser = await _userRepository.GetOrCreateAsync(debugEmail, cancellationToken).ConfigureAwait(false);
 
-        var session = new AuthSession
+        var session = await _db.AuthSessions.FirstOrDefaultAsync(s => s.Code == code);
+        if (session == null)
         {
-            Email = debugEmail,
-            Code = code ?? "123",
-            CreatedAtUtc = DateTime.UtcNow,
-            AuthToken = null,
-            TokenExpiresAtUtc = null,
-            IsLoggedOut = false,
-            UserId = debugUser.Id,
-        };
+            session = new AuthSession
+            {
+                Email = debugEmail,
+                Code = code ?? "123",
+                CreatedAtUtc = DateTime.UtcNow,
+                AuthToken = null,
+                TokenExpiresAtUtc = null,
+                IsLoggedOut = false,
+                UserId = debugUser.Id,
+            };
 
-        _db.AuthSessions.Add(session);
+            _db.AuthSessions.Add(session);
+        }
+
         await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
         var issued = _jwtTokenService.CreateToken(session.Email, session.Id, debugUser.Id);

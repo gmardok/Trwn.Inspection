@@ -66,7 +66,7 @@ namespace Trwn.Inspection.Web.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateInspectionReport(int id, InspectionReport report)
         {
-            var updatedReport = _inspectionReportsService.UpdateInspectionReport(id, report);
+            var updatedReport = await _inspectionReportsService.UpdateInspectionReport(id, report);
             if (updatedReport == null)
             {
                 return NotFound();
