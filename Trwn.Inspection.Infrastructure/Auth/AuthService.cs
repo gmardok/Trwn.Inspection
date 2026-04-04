@@ -52,32 +52,44 @@ public sealed class AuthService : IAuthService
 
         var user = await _userRepository.GetOrCreateAsync(email, cancellationToken).ConfigureAwait(false);
 
-        const int maxAttempts = 5;
-        for (var attempt = 0; attempt < maxAttempts; attempt++)
+        const int maxGuids = 5;
+        for (var attempt = 0; attempt < maxGuids; attempt++)
         {
-            var code = Guid.NewGuid().ToString("D").Split('-')[0].ToUpperInvariant();
-            var session = new AuthSession
+            var segments = Guid.NewGuid().ToString("D").Split('-');
+            foreach (var segment in segments)
             {
-                Email = email,
-                Code = code,
-                CreatedAtUtc = DateTime.UtcNow,
-                AuthToken = null,
-                TokenExpiresAtUtc = null,
-                IsLoggedOut = false,
-                UserId = user.Id,
-            };
+                var code = segment.ToUpperInvariant();
+                var codeExists = await _db.AuthSessions
+                    .AnyAsync(s => s.Code == code, cancellationToken)
+                    .ConfigureAwait(false);
 
-            _db.AuthSessions.Add(session);
+                if (codeExists)
+                    continue;
 
-            try
-            {
-                await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
-                await _emailSender.SendSignInCodeAsync(email, code, cancellationToken).ConfigureAwait(false);
-                return new AuthSendCodeResult(true, 200, null);
-            }
-            catch (DbUpdateException)
-            {
-                _db.Entry(session).State = EntityState.Detached;
+                var session = new AuthSession
+                {
+                    Email = email,
+                    Code = code,
+                    CreatedAtUtc = DateTime.UtcNow,
+                    AuthToken = null,
+                    TokenExpiresAtUtc = null,
+                    IsLoggedOut = false,
+                    UserId = user.Id,
+                };
+
+                _db.AuthSessions.Add(session);
+
+                try
+                {
+                    await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+                    await _emailSender.SendSignInCodeAsync(email, code, cancellationToken).ConfigureAwait(false);
+                    return new AuthSendCodeResult(true, 200, null);
+                }
+                catch (DbUpdateException)
+                {
+                    // Race condition: another request claimed this code between our check and save
+                    _db.Entry(session).State = EntityState.Detached;
+                }
             }
         }
 
