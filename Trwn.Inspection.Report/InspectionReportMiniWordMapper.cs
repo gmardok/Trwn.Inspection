@@ -11,8 +11,10 @@ namespace Trwn.Inspection.Report;
 /// </summary>
 public static class InspectionReportMiniWordMapper
 {
-    public static Dictionary<string, object> ToDictionary(InspectionReport report)
+    public static Dictionary<string, object> ToDictionary(InspectionReport report, string photoStoragePath)
     {
+        var majorDefects = report.PhotoDocumentation.Where(p => p.PhotoType == PhotoType.Major).ToList();
+        var minorDefects = report.PhotoDocumentation.Where(p => p.PhotoType == PhotoType.Minor).ToList();
         var d = new Dictionary<string, object>
         {
             ["ReportNo"] = report.ReportNo,
@@ -48,17 +50,21 @@ public static class InspectionReportMiniWordMapper
             ["ProductEvaluationForm"] = report.ProductEvaluationForm ? "JEST" : "NIE",
             ["TrimCard"] = report.TrimCard ? "JEST" : "NIE",
             ["MarkFinal"] = Mark(report.InspectionType == InspectionType.Final),
-            ["MarkDuringProduction"] = Mark(report.InspectionType == InspectionType.DuringProduction),
-            ["MarkReInspection"] = Mark(report.InspectionType == InspectionType.ReInspection),
+            ["MarkDuring"] = Mark(report.InspectionType == InspectionType.DuringProduction),
+            ["MarkRe"] = Mark(report.InspectionType == InspectionType.ReInspection),
             ["MarkResultPass"] = Mark(report.InspectionResult == InspectionResultType.Passes),
             ["MarkResultPending"] = Mark(report.InspectionResult == InspectionResultType.Pending),
             ["MarkResultFail"] = Mark(report.InspectionResult == InspectionResultType.Fail),
             ["InspectionOrder"] = BuildInspectionOrderRows(report),
-            ["PhotoMajor"] = BuildPhotoRows(report, PhotoType.Major),
-            ["PhotoMinor"] = BuildPhotoRows(report, PhotoType.Minor),
-            ["PhotoShippingMark"] = BuildPhotoRows(report, PhotoType.ShippingMark),
-            ["PhotoPackaging"] = BuildPhotoRows(report, PhotoType.Packaging),
-            ["PhotoPackageWithDeffects"] = BuildPhotoRows(report, PhotoType.PackageWithDeffects),
+            ["PhotoMajor"] = BuildPhotoRows(report, PhotoType.Major, photoStoragePath),
+            ["PhotoMinor"] = BuildPhotoRows(report, PhotoType.Minor, photoStoragePath),
+            ["PhotoShippingMark"] = BuildPhotoRows(report, PhotoType.ShippingMark, photoStoragePath),
+            ["PhotoPackaging"] = BuildPhotoRows(report, PhotoType.Packaging, photoStoragePath),
+            ["PhotoPackageWithDeffects"] = BuildPhotoRows(report, PhotoType.PackageWithDeffects, photoStoragePath),
+            ["MajorAllowed"] = "0",//majorDefects.Sum(d => d.),
+            ["MajorFound"] = "0",
+            ["MinorAllowed"] = "0",
+            ["MinorFound"] = "0"
         };
         return d;
     }
@@ -84,9 +90,9 @@ public static class InspectionReportMiniWordMapper
                 ["ShipmentQuantityPcs"] = line.ShipmentQuantityPcs,
                 ["ShipmentQuantityCartons"] = line.ShipmentQuantityCartons,
                 ["UnitsPacked"] = line.UnitsPacked,
-                ["ShipmentPcsPct"] = Pct(line.ShipmentQuantityPcs, oq),
+                ["UnitsPackedPct"] = Pct(line.UnitsPacked, oq),
                 ["UnitsFinishedNotPacked"] = line.UnitsFinishedNotPacked,
-                ["UnitsFinishedPct"] = Pct(line.UnitsFinishedNotPacked, oq),
+                ["UnitsFinishedNotPackedPct"] = Pct(line.UnitsFinishedNotPacked, oq),
                 ["UnitsNotFinished"] = line.UnitsNotFinished,
                 ["UnitsNotFinishedPct"] = Pct(line.UnitsNotFinished, oq),
             };
@@ -121,7 +127,7 @@ public static class InspectionReportMiniWordMapper
         return v.ToString(CultureInfo.InvariantCulture);
     }
 
-    private static List<Dictionary<string, object>> BuildPhotoRows(InspectionReport report, PhotoType type)
+    private static List<Dictionary<string, object>> BuildPhotoRows(InspectionReport report, PhotoType type, string photoStoragePath)
     {
         const int photoWidth = 200;
         const int photoHeight = 150;
@@ -130,11 +136,12 @@ public static class InspectionReportMiniWordMapper
         {
             if (p.PhotoType != type) continue;
             object photoValue = "";
-            if (!string.IsNullOrWhiteSpace(p.PicturePath) && File.Exists(p.PicturePath))
+            var fullPath = Path.Combine(photoStoragePath, p.PicturePath);
+            if (!string.IsNullOrWhiteSpace(p.PicturePath) && File.Exists(fullPath))
             {
                 photoValue = new MiniWordPicture
                 {
-                    Path = Path.GetFullPath(p.PicturePath),
+                    Path = Path.GetFullPath(fullPath),
                     Width = photoWidth,
                     Height = photoHeight,
                 };

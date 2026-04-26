@@ -61,5 +61,7 @@ namespace Trwn.Inspection.Models
         public string TestReport { get; set; } = null!;
         public bool TrimCard { get; set; }
         public string OtherRemarks { get; set; } = null!;
+        public int AllowedMajorCount { get; set; } = 0;
+        public int AllowedMinorCount { get; set; } = 0;
     }
 }

@@ -1,3 +1,5 @@
+using Microsoft.Extensions.Options;
+using Trwn.Inspection.Configuration;
 using Trwn.Inspection.Core.Interfaces;
 using Trwn.Inspection.Models;
 using Trwn.Inspection.Report;
@@ -8,9 +10,9 @@ public sealed class InspectionReportGenerator : IInspectionReportGenerator
 {
     private readonly InspectionReportDocumentGenerator _documentGenerator;
 
-    public InspectionReportGenerator()
+    public InspectionReportGenerator(IOptions<AppSettings> appSettings)
     {
-        _documentGenerator = new InspectionReportDocumentGenerator();
+        _documentGenerator = new InspectionReportDocumentGenerator(photoStoragePath: appSettings.Value.PhotoStoragePath);
     }
 
     public byte[] GenerateDocxReport(InspectionReport report)
